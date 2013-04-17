@@ -28,7 +28,6 @@ public class ApplyController
   private final JobApplicationSystem    jobApplicationSystem;
   private final ResumeManager           resumeManager;
   private final MyResumeManager         myResumeManager;
-  private static  enum   applicationResult {SUCCESS, RESUMENOTVALID, INVALIDJOB, MISSINGPROFILE};
 
   public ApplyController(JobseekerProfileManager jobseekerProfileManager,
                          JobSearchService jobSearchService,
@@ -57,11 +56,20 @@ public class ApplyController
     JobseekerProfile profile = jobseekerProfileManager.getJobSeekerProfile(jobseeker);
 
 
+
+
     Result result = getApplicaionResult(jobseeker, resumeName, jobIdString, profile, whichResumeString, makeResumeActiveString);
     response.setResult(result);
     return response;
   }
 
+  private boolean isResumeCompleteByPremiumUser(Jobseeker jobseeker, JobseekerProfile profile)
+  {
+
+    return !jobseeker.isPremium() && (profile.getStatus().equals(ProfileStatus.INCOMPLETE) ||
+                                      profile.getStatus().equals(ProfileStatus.NO_PROFILE) ||
+                                      profile.getStatus().equals(ProfileStatus.REMOVED));
+  }
   private Result getApplicaionResult( Jobseeker jobseeker,
                                             String resumeName,
                                             String  jobIdString,
@@ -91,9 +99,7 @@ public class ApplyController
 
       return new Result("error", model, errList);
     }
-    if (!jobseeker.isPremium() && (profile.getStatus().equals(ProfileStatus.INCOMPLETE) ||
-                                   profile.getStatus().equals(ProfileStatus.NO_PROFILE) ||
-                                   profile.getStatus().equals(ProfileStatus.REMOVED)))
+    if (isResumeCompleteByPremiumUser(jobseeker,profile))
     {
       return new Result("completeResumePlease", model);
     }
