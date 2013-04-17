@@ -52,12 +52,13 @@ public class TestIt
 
     Map<String, String> parameters = new HashMap<>();
     parameters.put("jobId","5");
+    parameters.put("resumeName", SHARED_RESUME_NAME);
 
     HttpRequest request = new HttpRequest(session, parameters);
 
     HttpResponse response = new HttpResponse();
 
-    controller.handle(request, response, SHARED_RESUME_NAME);
+    controller.handle(request, response);
 
     assertEquals("success", response.getResultType());
   }
@@ -70,12 +71,14 @@ public class TestIt
 
     Map<String, String> parameters = new HashMap<>();
     parameters.put("jobId","5");
+    parameters.put("resumeName", SHARED_RESUME_NAME);
+
 
     HttpRequest request = new HttpRequest(session, parameters);
 
     HttpResponse response = new HttpResponse();
 
-    controller.handle(request, response, SHARED_RESUME_NAME);
+    controller.handle(request, response);
 
     assertEquals("success", response.getResultType());
   }
@@ -89,12 +92,14 @@ public class TestIt
     Map<String, String> parameters = new HashMap<>();
     parameters.put("jobId","5");
     parameters.put("whichResume", "existing");
+    parameters.put("resumeName", SHARED_RESUME_NAME);
+
 
     HttpRequest request = new HttpRequest(session, parameters);
 
     HttpResponse response = new HttpResponse();
 
-    controller.handle(request, response, SHARED_RESUME_NAME);
+    controller.handle(request, response);
 
     assertEquals("success", response.getResultType());
   }
@@ -107,12 +112,14 @@ public class TestIt
 
     Map<String, String> parameters = new HashMap<>();
     parameters.put("jobId", String.valueOf(INVALID_JOB_ID));
+    parameters.put("resumeName", SHARED_RESUME_NAME);
+
 
     HttpRequest request = new HttpRequest(session, parameters);
 
     HttpResponse response = new HttpResponse();
 
-    controller.handle(request, response, SHARED_RESUME_NAME);
+    controller.handle(request, response);
 
     assertEquals("invalidJob", response.getResultType());
   }
@@ -125,12 +132,14 @@ public class TestIt
 
     Map<String, String> parameters = new HashMap<>();
     parameters.put("jobId", "5");
+    parameters.put("resumeName", null);
+
 
     HttpRequest request = new HttpRequest(session, parameters);
 
     HttpResponse response = new HttpResponse();
 
-    controller.handle(request, response, null);
+    controller.handle(request, response);
 
     assertEquals("error", response.getResultType());
   }
@@ -143,12 +152,13 @@ public class TestIt
 
     Map<String, String> parameters = new HashMap<>();
     parameters.put("jobId","15");
+    parameters.put("resumeName", SHARED_RESUME_NAME);
 
     HttpRequest request = new HttpRequest(session, parameters);
 
     HttpResponse response = new HttpResponse();
 
-    controller.handle(request, response, SHARED_RESUME_NAME);
+    controller.handle(request, response);
 
     assertEquals("error", response.getResultType());
   }
@@ -161,12 +171,14 @@ public class TestIt
 
     Map<String, String> parameters = new HashMap<>();
     parameters.put("jobId","5");
+    parameters.put("resumeName", SHARED_RESUME_NAME);
+
 
     HttpRequest request = new HttpRequest(session, parameters);
 
     HttpResponse response = new HttpResponse();
 
-    controller.handle(request, response, SHARED_RESUME_NAME);
+    controller.handle(request, response);
 
     assertEquals("completeResumePlease", response.getResultType());
   }
@@ -179,12 +191,14 @@ public class TestIt
 
     Map<String, String> parameters = new HashMap<>();
     parameters.put("jobId","5");
+    parameters.put("resumeName", SHARED_RESUME_NAME);
+
 
     HttpRequest request = new HttpRequest(session, parameters);
 
     HttpResponse response = new HttpResponse();
 
-    controller.handle(request, response, SHARED_RESUME_NAME);
+    controller.handle(request, response);
 
     assertTrue(resumeRepository.contains(new Resume(SHARED_RESUME_NAME)));
   }
@@ -198,12 +212,14 @@ public class TestIt
     Map<String, String> parameters = new HashMap<>();
     parameters.put("jobId","5");
     parameters.put("makeResumeActive", "yes");
+    parameters.put("resumeName", "Save Me Seymour");
+
 
     HttpRequest request = new HttpRequest(session, parameters);
 
     HttpResponse response = new HttpResponse();
 
-    controller.handle(request, response, "Save Me Seymour");
+    controller.handle(request, response);
 
     assertEquals(new Resume("Save Me Seymour"), activeResumeRepository.activeResumeFor(APPROVED_JOBSEEKER));
   }
