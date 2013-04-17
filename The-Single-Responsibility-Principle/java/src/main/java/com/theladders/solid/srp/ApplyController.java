@@ -20,6 +20,7 @@ import com.theladders.solid.srp.jobseeker.Jobseeker;
 import com.theladders.solid.srp.resume.MyResumeManager;
 import com.theladders.solid.srp.resume.Resume;
 import com.theladders.solid.srp.resume.ResumeManager;
+import com.theladders.solid.srp.ApplicationManager;
 
 public class ApplyController
 {
@@ -58,8 +59,6 @@ public class ApplyController
     try
     {
       Resume resume = saveNewOrRetrieveExistingResume(resumeName, jobseeker, whichResumeString, makeResumeActiveString);
-
-
     }
 
     catch (Exception e)
@@ -99,7 +98,6 @@ public class ApplyController
 
   {
     Job job = jobSearchService.getJob(Integer.parseInt(jobIdString));
-
     Map<String, Object> model = new HashMap<>();
     List<String> errList = new ArrayList<>();
     if (job == null)
@@ -111,6 +109,7 @@ public class ApplyController
     try
     {
       Resume resume = saveNewOrRetrieveExistingResume(resumeName, jobseeker, whichResumeString, makeResumeActiveString);
+      ApplicationManager applicationManager = new ApplicationManager(job, resume, jobseeker);
       apply(jobseeker, job, resume);
     }
     catch (Exception e)
@@ -123,12 +122,10 @@ public class ApplyController
       return new Result("completeResumePlease", model);
     }
     return new Result("success", model);
-
   }
 
 
   private void apply(
-
           Jobseeker jobseeker,
           Job job,
           Resume resume)
@@ -153,7 +150,6 @@ public class ApplyController
     if (!"existing".equals(whichResumeString))
     {
       resume = resumeManager.saveResume(jobseeker, newResumeFileName);
-
       if (resume != null && "yes".equals(makeResumeActiveString))
       {
         myResumeManager.saveAsActive(jobseeker, resume);
