@@ -1,10 +1,7 @@
 
 package com.theladders.solid.srp;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
 
 import com.theladders.solid.srp.ApplicationResultSatate;
 import com.theladders.solid.srp.job.Job;
@@ -81,6 +78,14 @@ public class ApplicationManager
   }
 
 
+  private void handleApplicationResult(JobApplicationResult result)
+  {
+    if (result.failure())
+    {
+      throw new ApplicationFailureException(result.toString());
+    }
+  }
+
   private void apply(
           Jobseeker jobseeker,
           Job job,
@@ -88,11 +93,7 @@ public class ApplicationManager
   {
     UnprocessedApplication application = new UnprocessedApplication(jobseeker, job, resume);
     JobApplicationResult applicationResult = jobApplicationSystem.apply(application);
-
-    if (applicationResult.failure())
-    {
-      throw new ApplicationFailureException(applicationResult.toString());
-    }
+    handleApplicationResult(applicationResult);
   }
 
 
