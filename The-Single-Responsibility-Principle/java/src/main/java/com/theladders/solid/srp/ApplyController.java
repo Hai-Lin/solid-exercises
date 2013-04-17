@@ -63,7 +63,6 @@ public class ApplyController
     Map<String, Object> model = new HashMap<>();
     model.put("jobId", Integer.parseInt(jobIdString));
     return new Result("invalidJob", model);
-
   }
 
 
@@ -75,18 +74,14 @@ public class ApplyController
                                           String whichResumeString,
                                           String makeResumeActiveString)
   {
-
     Job job = jobSearchService.getJob(Integer.parseInt(jobIdString));
-
-    if (job == null)
-    {
-      return getJobNonExistResult(jobIdString);
-    }
     ApplicationResultSatate resultSatate = applicationManager.getApplicationResult(jobSeeker,
                                                                                    resumeName,
                                                                                    job,
                                                                                    whichResumeString,
                                                                                    makeResumeActiveString);
+    if(resultSatate == ApplicationResultSatate.JOB_NOT_FOUND)
+      return getJobNonExistResult(jobIdString);
     return this.resultMap.get(resultSatate);
 
   }

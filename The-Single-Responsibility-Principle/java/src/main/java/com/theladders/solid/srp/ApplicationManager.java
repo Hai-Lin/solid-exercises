@@ -52,8 +52,6 @@ public class ApplicationManager
   }
 
 
-
-
   public ApplicationResultSatate getApplicationResult(Jobseeker jobseeker,
                                                       String resumeName,
                                                       Job job,
@@ -61,7 +59,10 @@ public class ApplicationManager
                                                       String makeResumeActiveString)
 
   {
-
+    if (job == null)
+    {
+      return ApplicationResultSatate.JOB_NOT_FOUND;
+    }
     JobseekerProfile profile = jobseekerProfileManager.getJobSeekerProfile(jobseeker);
     try
     {
