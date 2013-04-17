@@ -42,21 +42,32 @@ public class ApplyController
     this.myResumeManager = myResumeManager;
   }
 
+
+
+  private int getJobId(HttpRequest request)
+  {
+    String jobIdString = request.getParameter("jobId");
+    return Integer.parseInt(jobIdString);
+  }
+
+  private Job getJob(HttpRequest request)
+  {
+    return jobSearchService.getJob(this.getJobId(request));
+  }
+
   public HttpResponse handle(HttpRequest request,
-                             HttpResponse response,
-                             String origFileName)
+                             HttpResponse response)
   {
     Jobseeker jobseeker = request.getSession().getJobseeker();
     JobseekerProfile profile = jobseekerProfileManager.getJobSeekerProfile(jobseeker);
+    Job job = getJob(request);
+    String resumeName = request.getParameter("resumeName");
 
-    String jobIdString = request.getParameter("jobId");
-    int jobId = Integer.parseInt(jobIdString);
 
-    Job job = jobSearchService.getJob(jobId);
 
     if (job == null)
     {
-      provideInvalidJobView(response, jobId);
+      provideInvalidJobView(response, this.getJobId(request));
       return response;
     }
 
@@ -66,7 +77,8 @@ public class ApplyController
 
     try
     {
-      apply(request, jobseeker, job, origFileName);
+      Resume resume = saveNewOrRetrieveExistingResume(resumeName,jobseeker, request);
+      apply(jobseeker, job,resume);
     }
     catch (Exception e)
     {
@@ -75,7 +87,7 @@ public class ApplyController
       return response;
     }
 
-    model.put("jobId", job.getJobId());
+    Object jobId = model.put("jobId", job.getJobId());
     model.put("jobTitle", job.getTitle());
 
     if (!jobseeker.isPremium() && (profile.getStatus().equals(ProfileStatus.INCOMPLETE) ||
@@ -87,7 +99,6 @@ public class ApplyController
     }
 
     provideApplySuccessView(response, model);
-
     return response;
   }
 
@@ -109,12 +120,12 @@ public class ApplyController
    response.setResult(result);
   }
 
-  private void apply(HttpRequest request,
+  private void apply(
+
                      Jobseeker jobseeker,
                      Job job,
-                     String fileName)
+                     Resume resume)
   {
-    Resume resume = saveNewOrRetrieveExistingResume(fileName,jobseeker, request);
     UnprocessedApplication application = new UnprocessedApplication(jobseeker, job, resume);
     JobApplicationResult applicationResult = jobApplicationSystem.apply(application);
 
@@ -123,6 +134,8 @@ public class ApplyController
       throw new ApplicationFailureException(applicationResult.toString());
     }
   }
+
+
 
   private Resume saveNewOrRetrieveExistingResume(String newResumeFileName,
                                                  Jobseeker jobseeker,
