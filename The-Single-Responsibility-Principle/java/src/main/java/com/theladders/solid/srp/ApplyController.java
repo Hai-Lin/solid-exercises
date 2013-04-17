@@ -25,11 +25,9 @@ import com.theladders.solid.srp.ApplicationResultSatate;
 
 public class ApplyController
 {
-  private final JobseekerProfileManager jobseekerProfileManager;
-  private final JobSearchService        jobSearchService;
-  private final JobApplicationSystem    jobApplicationSystem;
-  private final ResumeManager           resumeManager;
-  private final MyResumeManager         myResumeManager;
+  private final JobSearchService jobSearchService;
+
+  private final ApplicationManager applicationManager;
 
 
   public ApplyController(JobseekerProfileManager jobseekerProfileManager,
@@ -38,21 +36,14 @@ public class ApplyController
                          ResumeManager resumeManager,
                          MyResumeManager myResumeManager)
   {
-    this.jobseekerProfileManager = jobseekerProfileManager;
+
     this.jobSearchService = jobSearchService;
-    this.jobApplicationSystem = jobApplicationSystem;
-    this.resumeManager = resumeManager;
-    this.myResumeManager = myResumeManager;
+    this.applicationManager = new ApplicationManager(jobseekerProfileManager,
+                                                     jobApplicationSystem,
+                                                     resumeManager,
+                                                     myResumeManager);
   }
 
-  private HttpResponse handleNullJob(HttpResponse response, String jobIdString)
-  {
-    Map<String, Object> model = new HashMap<>();
-      model.put("jobId", Integer.parseInt(jobIdString));
-      Result result = new Result("invalidJob", model);
-      response.setResult(result);
-      return response;
-  }
 
   public HttpResponse handle(HttpRequest request,
                              HttpResponse response)
@@ -64,93 +55,17 @@ public class ApplyController
     String whichResumeString = request.getParameter("whichResume");
     Job job = jobSearchService.getJob(Integer.parseInt(jobIdString));
     if (job == null)
-      return handleNullJob(response,jobIdString);
-    Result result = getApplicationResult(jobseeker,
+    {
+      return applicationManager.handleNullJob(response, jobIdString);
+    }
+    Result result = applicationManager.getApplicationResult(jobseeker,
                                          resumeName,
                                          job,
                                          whichResumeString,
                                          makeResumeActiveString);
+
     response.setResult(result);
     return response;
-  }
-
-
-  private boolean isResumeCompleteByPremiumUser(Jobseeker jobseeker,
-                                                JobseekerProfile profile)
-  {
-
-    return !jobseeker.isPremium() && (profile.getStatus().equals(ProfileStatus.INCOMPLETE) ||
-                                      profile.getStatus().equals(ProfileStatus.NO_PROFILE) ||
-                                      profile.getStatus().equals(ProfileStatus.REMOVED));
-  }
-
-
-  private Result getApplicationResult(Jobseeker jobseeker,
-                                      String resumeName,
-                                      Job job,
-                                      String whichResumeString,
-                                      String makeResumeActiveString)
-
-  {
-    Map<String, Object> model = new HashMap<>();
-    List<String> errList = new ArrayList<>();
-    JobseekerProfile profile = jobseekerProfileManager.getJobSeekerProfile(jobseeker);
-
-
-    try
-    {
-      Resume resume = saveNewOrRetrieveExistingResume(resumeName, jobseeker, whichResumeString, makeResumeActiveString);
-      apply(jobseeker, job, resume);
-    }
-    catch (Exception e)
-    {
-      errList.add("We could not process your application.");
-      return new Result("error", model, errList);
-    }
-    if (isResumeCompleteByPremiumUser(jobseeker, profile))
-    {
-      return new Result("completeResumePlease", model);
-    }
-    return new Result("success", model);
-  }
-
-
-  private void apply(
-          Jobseeker jobseeker,
-          Job job,
-          Resume resume)
-  {
-    UnprocessedApplication application = new UnprocessedApplication(jobseeker, job, resume);
-    JobApplicationResult applicationResult = jobApplicationSystem.apply(application);
-
-    if (applicationResult.failure())
-    {
-      throw new ApplicationFailureException(applicationResult.toString());
-    }
-  }
-
-
-  private Resume saveNewOrRetrieveExistingResume(String newResumeFileName,
-                                                 Jobseeker jobseeker,
-                                                 String whichResumeString,
-                                                 String makeResumeActiveString)
-  {
-    Resume resume;
-
-    if (!"existing".equals(whichResumeString))
-    {
-      resume = resumeManager.saveResume(jobseeker, newResumeFileName);
-      if (resume != null && "yes".equals(makeResumeActiveString))
-      {
-        myResumeManager.saveAsActive(jobseeker, resume);
-      }
-    }
-    else
-    {
-      resume = myResumeManager.getActiveResume(jobseeker.getId());
-    }
-
-    return resume;
   }
 
 
