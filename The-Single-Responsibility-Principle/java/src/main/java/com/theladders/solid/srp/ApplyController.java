@@ -1,6 +1,10 @@
 package com.theladders.solid.srp;
 
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import com.theladders.solid.srp.http.HttpRequest;
 import com.theladders.solid.srp.http.HttpResponse;
@@ -17,7 +21,8 @@ public class ApplyController
 {
   private final JobSearchService jobSearchService;
 
-  private final ApplicationManager applicationManager;
+  private final HashMap<ApplicationResultSatate, Result> resultMap;
+  private final ApplicationManager                       applicationManager;
 
 
   public ApplyController(JobseekerProfileManager jobseekerProfileManager,
@@ -27,6 +32,8 @@ public class ApplyController
                          MyResumeManager myResumeManager)
   {
 
+    this.resultMap = new HashMap<>();
+    setResultMap();
     this.jobSearchService = jobSearchService;
     this.applicationManager = new ApplicationManager(jobseekerProfileManager,
                                                      jobApplicationSystem,
@@ -34,12 +41,32 @@ public class ApplyController
                                                      myResumeManager);
   }
 
-  private HttpResponse handleNullJob(HttpResponse response, String jobIdString)
+
+  private void setResultMap()
+  {
+    Map<String, Object> model = new HashMap<>();
+    List<String> errList = new ArrayList<>();
+
+    Result success = new Result("success", model);
+    this.resultMap.put(ApplicationResultSatate.SUCCESS, success);
+    Result resumeNotComplete = new Result("completeResumePlease", model);
+    this.resultMap.put(ApplicationResultSatate.RESUME_NOT_COMPLETE, resumeNotComplete);
+
+    errList.add("We could not process your application.");
+    Result error = new Result("error", model, errList);
+    errList.clear();
+    this.resultMap.put(ApplicationResultSatate.INVALID, error);
+  }
+
+
+  private HttpResponse handleNullJob(HttpResponse response,
+                                     String jobIdString)
   {
     Result result = applicationManager.handleNullJob(jobIdString);
     response.setResult(result);
     return response;
   }
+
 
   public HttpResponse handle(HttpRequest request,
                              HttpResponse response)
@@ -55,10 +82,10 @@ public class ApplyController
       return handleNullJob(response, jobIdString);
     }
     Result result = applicationManager.getApplicationResult(jobseeker,
-                                         resumeName,
-                                         job,
-                                         whichResumeString,
-                                         makeResumeActiveString);
+                                                            resumeName,
+                                                            job,
+                                                            whichResumeString,
+                                                            makeResumeActiveString);
 
     response.setResult(result);
     return response;

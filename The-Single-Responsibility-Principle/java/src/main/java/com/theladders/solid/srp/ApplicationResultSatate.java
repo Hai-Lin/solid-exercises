@@ -11,5 +11,6 @@ public enum ApplicationResultSatate
 {
   JOB_NOT_FOUND,
   SUCCESS,
-  COMPLETEP_ROFILE_FIRST
+  RESUME_NOT_COMPLETE,
+  INVALID
 }
