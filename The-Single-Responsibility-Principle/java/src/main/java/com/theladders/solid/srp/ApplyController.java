@@ -46,12 +46,10 @@ public class ApplyController
   {
     Map<String, Object> model = new HashMap<>();
     List<String> errList = new ArrayList<>();
-
     Result success = new Result("success", model);
     this.resultMap.put(ApplicationResultSatate.SUCCESS, success);
     Result resumeNotComplete = new Result("completeResumePlease", model);
     this.resultMap.put(ApplicationResultSatate.RESUME_NOT_COMPLETE, resumeNotComplete);
-
     errList.add("We could not process your application.");
     Result error = new Result("error", model, errList);
     errList.clear();
@@ -59,10 +57,18 @@ public class ApplyController
   }
 
 
+  private Result getJobNonExistResult(String jobIdString)
+  {
+
+    Map<String, Object> model = new HashMap<>();
+    model.put("jobId", Integer.parseInt(jobIdString));
+    return new Result("invalidJob", model);
+
+  }
   private HttpResponse handleNullJob(HttpResponse response,
                                      String jobIdString)
   {
-    Result result = applicationManager.handleNullJob(jobIdString);
+    Result result = getJobNonExistResult(jobIdString);
     response.setResult(result);
     return response;
   }

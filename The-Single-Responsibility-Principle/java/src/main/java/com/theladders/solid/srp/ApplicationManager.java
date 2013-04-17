@@ -42,16 +42,6 @@ public class ApplicationManager
   }
 
 
-  public Result handleNullJob(String jobIdString)
-  {
-
-    Map<String, Object> model = new HashMap<>();
-    model.put("jobId", Integer.parseInt(jobIdString));
-    return new Result("invalidJob", model);
-
-  }
-
-
   private boolean isResumeCompleteByPremiumUser(Jobseeker jobseeker,
                                                 JobseekerProfile profile)
   {
