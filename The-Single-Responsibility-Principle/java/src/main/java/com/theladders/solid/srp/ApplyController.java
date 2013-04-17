@@ -81,13 +81,13 @@ public class ApplyController
     {
       return handleNullJob(response, jobIdString);
     }
-    Result result = applicationManager.getApplicationResult(jobseeker,
+    ApplicationResultSatate resultSatate = applicationManager.getApplicationResult(jobseeker,
                                                             resumeName,
                                                             job,
                                                             whichResumeString,
                                                             makeResumeActiveString);
 
-    response.setResult(result);
+    response.setResult(resultMap.get(resultSatate));
     return response;
   }
 

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import com.theladders.solid.srp.ApplicationResultSatate;
 import com.theladders.solid.srp.job.Job;
 import com.theladders.solid.srp.job.application.ApplicationFailureException;
@@ -18,8 +19,6 @@ import com.theladders.solid.srp.jobseeker.Jobseeker;
 import com.theladders.solid.srp.resume.MyResumeManager;
 import com.theladders.solid.srp.resume.Resume;
 import com.theladders.solid.srp.resume.ResumeManager;
-
-
 
 
 public class ApplicationManager
@@ -45,6 +44,7 @@ public class ApplicationManager
 
   public Result handleNullJob(String jobIdString)
   {
+
     Map<String, Object> model = new HashMap<>();
     model.put("jobId", Integer.parseInt(jobIdString));
     return new Result("invalidJob", model);
@@ -62,18 +62,17 @@ public class ApplicationManager
   }
 
 
-  public Result getApplicationResult(Jobseeker jobseeker,
-                                     String resumeName,
-                                     Job job,
-                                     String whichResumeString,
-                                     String makeResumeActiveString)
+
+
+  public ApplicationResultSatate getApplicationResult(Jobseeker jobseeker,
+                                                      String resumeName,
+                                                      Job job,
+                                                      String whichResumeString,
+                                                      String makeResumeActiveString)
 
   {
-    Map<String, Object> model = new HashMap<>();
-    List<String> errList = new ArrayList<>();
+
     JobseekerProfile profile = jobseekerProfileManager.getJobSeekerProfile(jobseeker);
-
-
     try
     {
       Resume resume = saveNewOrRetrieveExistingResume(resumeName, jobseeker, whichResumeString, makeResumeActiveString);
@@ -81,14 +80,13 @@ public class ApplicationManager
     }
     catch (Exception e)
     {
-      errList.add("We could not process your application.");
-      return new Result("error", model, errList);
+      return ApplicationResultSatate.INVALID;
     }
     if (isResumeCompleteByPremiumUser(jobseeker, profile))
     {
-      return new Result("completeResumePlease", model);
+      return ApplicationResultSatate.RESUME_NOT_COMPLETE;
     }
-    return new Result("success", model);
+    return ApplicationResultSatate.SUCCESS;
   }
 
 
