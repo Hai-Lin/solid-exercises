@@ -48,7 +48,6 @@ public class ApplyController
   private HttpResponse handleNullJob(HttpResponse response, String jobIdString)
   {
     Map<String, Object> model = new HashMap<>();
-    List<String> errList = new ArrayList<>();
       model.put("jobId", Integer.parseInt(jobIdString));
       Result result = new Result("invalidJob", model);
       response.setResult(result);
@@ -58,30 +57,21 @@ public class ApplyController
   public HttpResponse handle(HttpRequest request,
                              HttpResponse response)
   {
-    Jobseeker jobseeker = request.getSession().getJobseeker();
     String jobIdString = request.getParameter("jobId");
+    Jobseeker jobseeker = request.getSession().getJobseeker();
     String makeResumeActiveString = request.getParameter("makeResumeActive");
     String resumeName = request.getParameter("resumeName");
     String whichResumeString = request.getParameter("whichResume");
-    JobseekerProfile profile = jobseekerProfileManager.getJobSeekerProfile(jobseeker);
     Job job = jobSearchService.getJob(Integer.parseInt(jobIdString));
-
     if (job == null)
       return handleNullJob(response,jobIdString);
-
-
-
     Result result = getApplicationResult(jobseeker,
                                          resumeName,
                                          job,
-                                         profile,
                                          whichResumeString,
                                          makeResumeActiveString);
-
     response.setResult(result);
     return response;
-
-
   }
 
 
@@ -98,18 +88,18 @@ public class ApplyController
   private Result getApplicationResult(Jobseeker jobseeker,
                                       String resumeName,
                                       Job job,
-                                      JobseekerProfile profile,
                                       String whichResumeString,
                                       String makeResumeActiveString)
 
   {
     Map<String, Object> model = new HashMap<>();
     List<String> errList = new ArrayList<>();
+    JobseekerProfile profile = jobseekerProfileManager.getJobSeekerProfile(jobseeker);
+
 
     try
     {
       Resume resume = saveNewOrRetrieveExistingResume(resumeName, jobseeker, whichResumeString, makeResumeActiveString);
-      ApplicationManager applicationManager = new ApplicationManager(job, resume, jobseeker);
       apply(jobseeker, job, resume);
     }
     catch (Exception e)

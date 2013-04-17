@@ -33,23 +33,42 @@ import com.theladders.solid.srp.ApplicationResultSatate;
  */
 public class ApplicationManager
 {
-  private final Job job;
-  private final Resume resume;
-  private final Jobseeker jobseeker;
+  private final Job                     job;
+  private final Resume                  resume;
+  private final Jobseeker               jobseeker;
+  private final JobseekerProfileManager jobseekerProfileManager;
+  private final JobSearchService        jobSearchService;
+  private final JobApplicationSystem    jobApplicationSystem;
+  private final ResumeManager           resumeManager;
+  private final MyResumeManager         myResumeManager;
 
 
-  public ApplicationManager(Job job, Resume resume, Jobseeker jobseeker)
+  public ApplicationManager(Job job,
+                            Resume resume,
+                            Jobseeker jobseeker,
+                            JobseekerProfileManager jobseekerProfileManager,
+                            JobSearchService jobSearchService,
+                            JobApplicationSystem jobApplicationSystem,
+                            ResumeManager resumeManager,
+                            MyResumeManager myResumeManager)
   {
     this.job = job;
     this.resume = resume;
     this.jobseeker = jobseeker;
+    this.jobseekerProfileManager = jobseekerProfileManager;
+    this.jobSearchService = jobSearchService;
+    this.jobApplicationSystem = jobApplicationSystem;
+    this.resumeManager = resumeManager;
+    this.myResumeManager = myResumeManager;
   }
+
 
   public final ApplicationResultSatate getApplicationResult()
   {
-    if(this.job == null)
+    if (this.job == null)
+    {
       return ApplicationResultSatate.JOB_NOT_FOUND;
-
+    }
 
 
     return ApplicationResultSatate.SUCCESS;
