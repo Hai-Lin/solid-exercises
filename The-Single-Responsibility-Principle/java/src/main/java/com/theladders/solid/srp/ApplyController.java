@@ -21,6 +21,7 @@ import com.theladders.solid.srp.resume.MyResumeManager;
 import com.theladders.solid.srp.resume.Resume;
 import com.theladders.solid.srp.resume.ResumeManager;
 import com.theladders.solid.srp.ApplicationManager;
+import com.theladders.solid.srp.ApplicationResultSatate;
 
 public class ApplyController
 {

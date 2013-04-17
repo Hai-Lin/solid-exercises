@@ -21,6 +21,8 @@ import com.theladders.solid.srp.jobseeker.Jobseeker;
 import com.theladders.solid.srp.resume.MyResumeManager;
 import com.theladders.solid.srp.resume.Resume;
 import com.theladders.solid.srp.resume.ResumeManager;
+import com.theladders.solid.srp.ApplicationResultSatate;
+
 
 /**
  * Created with IntelliJ IDEA.
@@ -35,10 +37,18 @@ public class ApplicationManager
   private final Resume resume;
   private final Jobseeker jobseeker;
 
+
   public ApplicationManager(Job job, Resume resume, Jobseeker jobseeker)
   {
     this.job = job;
     this.resume = resume;
     this.jobseeker = jobseeker;
   }
+
+  public final ApplicationResultSatate getApplicationResult()
+  {
+    return ApplicationResultSatate.COMPLETEPROFILEFIRST;
+  }
+
+
 }
