@@ -6,10 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.theladders.solid.srp.http.HttpRequest;
-import com.theladders.solid.srp.http.HttpResponse;
 import com.theladders.solid.srp.job.Job;
-import com.theladders.solid.srp.job.JobSearchService;
 import com.theladders.solid.srp.job.application.ApplicationFailureException;
 import com.theladders.solid.srp.job.application.JobApplicationResult;
 import com.theladders.solid.srp.job.application.JobApplicationSystem;
@@ -52,18 +49,14 @@ public class ApplicationManager
   }
 
 
-
-
-
-  public HttpResponse handleNullJob(HttpResponse response,
-                                     String jobIdString)
+  public Result handleNullJob(String jobIdString)
   {
     Map<String, Object> model = new HashMap<>();
     model.put("jobId", Integer.parseInt(jobIdString));
-    Result result = new Result("invalidJob", model);
-    response.setResult(result);
-    return response;
+    return new Result("invalidJob", model);
+
   }
+
 
   private boolean isResumeCompleteByPremiumUser(Jobseeker jobseeker,
                                                 JobseekerProfile profile)
@@ -74,11 +67,12 @@ public class ApplicationManager
                                       profile.getStatus().equals(ProfileStatus.REMOVED));
   }
 
+
   public Result getApplicationResult(Jobseeker jobseeker,
-                                      String resumeName,
-                                      Job job,
-                                      String whichResumeString,
-                                      String makeResumeActiveString)
+                                     String resumeName,
+                                     Job job,
+                                     String whichResumeString,
+                                     String makeResumeActiveString)
 
   {
     Map<String, Object> model = new HashMap<>();
