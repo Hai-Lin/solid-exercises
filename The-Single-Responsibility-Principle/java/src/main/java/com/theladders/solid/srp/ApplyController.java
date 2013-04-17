@@ -28,7 +28,7 @@ public class ApplyController
   private final JobApplicationSystem    jobApplicationSystem;
   private final ResumeManager           resumeManager;
   private final MyResumeManager         myResumeManager;
-  private static  enum   applicationResult {SUCCESS, RESUMENOTVALID, JOBNOTEXISTED, MISSINGPROFILE};
+  private static  enum   applicationResult {SUCCESS, RESUMENOTVALID, INVALIDJOB, MISSINGPROFILE};
 
   public ApplyController(JobseekerProfileManager jobseekerProfileManager,
                          JobSearchService jobSearchService,
@@ -57,15 +57,20 @@ public class ApplyController
     return applyJobHandler(response, jobseeker, resumeName, jobIdString, whichResumeString, makeResumeActiveString);
   }
 
-  private applicationResult getApplicaionResult( Jobseeker jobseeker,
+  private Result getApplicaionResult( Jobseeker jobseeker,
                                             String resumeName,
                                             Job    job,
                                             JobseekerProfile profile,
                                             String whichResumeString,
                                             String makeResumeActiveString)
   {
+    Map<String, Object> model = new HashMap<>();
+
+    List<String> errList = new ArrayList<>();
             if(job == null)
-              return applicationResult.JOBNOTEXISTED;
+              return new Result("invalidJob", model);
+
+
     try
     {
       Resume resume = saveNewOrRetrieveExistingResume(resumeName,jobseeker, whichResumeString,makeResumeActiveString);
@@ -73,16 +78,16 @@ public class ApplyController
     }
     catch (Exception e)
     {
-      return applicationResult.RESUMENOTVALID;
+      return new Result("error", model, errList);
     }
     if (!jobseeker.isPremium() && (profile.getStatus().equals(ProfileStatus.INCOMPLETE) ||
                                    profile.getStatus().equals(ProfileStatus.NO_PROFILE) ||
                                    profile.getStatus().equals(ProfileStatus.REMOVED)))
     {
-      return applicationResult.MISSINGPROFILE;
+      return new Result("completeResumePlease", model);
     }
 
-    return applicationResult.SUCCESS;
+    return new Result("success", model);
 
   }
 
