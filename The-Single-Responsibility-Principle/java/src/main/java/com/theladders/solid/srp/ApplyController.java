@@ -103,43 +103,10 @@ public class ApplyController
     Job job = jobSearchService.getJob(Integer.parseInt(jobIdString));
 
 
-    //applicationResult result = getApplicaionResult(jobseeker, resumeName, job, profile, whichResumeString, makeResumeActiveString);
-
-    if (job == null)
-    {
-      provideInvalidJobView(response, Integer.parseInt(jobIdString));
-      return response;
-    }
-
-    Map<String, Object> model = new HashMap<>();
-
-    List<String> errList = new ArrayList<>();
-
-    try
-    {
-      Resume resume = saveNewOrRetrieveExistingResume(resumeName,jobseeker, whichResumeString,makeResumeActiveString);
-      apply(jobseeker, job,resume);
-    }
-    catch (Exception e)
-    {
-      errList.add("We could not process your application.");
-      provideErrorView(response, errList, model);
-      return response;
-    }
-
-    Object jobId = model.put("jobId", job.getJobId());
-    model.put("jobTitle", job.getTitle());
-
-    if (!jobseeker.isPremium() && (profile.getStatus().equals(ProfileStatus.INCOMPLETE) ||
-                                   profile.getStatus().equals(ProfileStatus.NO_PROFILE) ||
-                                   profile.getStatus().equals(ProfileStatus.REMOVED)))
-    {
-      provideResumeCompletionView(response, model);
-      return response;
-    }
-
-    provideApplySuccessView(response, model);
+    Result result = getApplicaionResult(jobseeker, resumeName, job, profile, whichResumeString, makeResumeActiveString);
+    response.setResult(result);
     return response;
+
   }
 
 
