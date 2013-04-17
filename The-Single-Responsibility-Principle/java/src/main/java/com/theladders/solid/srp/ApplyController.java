@@ -54,23 +54,32 @@ public class ApplyController
     String makeResumeActiveString = request.getParameter("makeResumeActive");
     String resumeName = request.getParameter("resumeName");
     String whichResumeString = request.getParameter("whichResume");
-    return applyJobHandler(response, jobseeker, resumeName, jobIdString, whichResumeString, makeResumeActiveString);
+    JobseekerProfile profile = jobseekerProfileManager.getJobSeekerProfile(jobseeker);
+
+
+    Result result = getApplicaionResult(jobseeker, resumeName, jobIdString, profile, whichResumeString, makeResumeActiveString);
+    response.setResult(result);
+    return response;
   }
 
   private Result getApplicaionResult( Jobseeker jobseeker,
                                             String resumeName,
-                                            Job    job,
+                                            String  jobIdString,
                                             JobseekerProfile profile,
                                             String whichResumeString,
                                             String makeResumeActiveString)
-  {
-    Map<String, Object> model = new HashMap<>();
 
+  {
+    Job job = jobSearchService.getJob(Integer.parseInt(jobIdString));
+
+    Map<String, Object> model = new HashMap<>();
     List<String> errList = new ArrayList<>();
             if(job == null)
+            {
+              model.put("jobId", Integer.parseInt(jobIdString));
               return new Result("invalidJob", model);
 
-
+            }
     try
     {
       Resume resume = saveNewOrRetrieveExistingResume(resumeName,jobseeker, whichResumeString,makeResumeActiveString);
@@ -78,6 +87,8 @@ public class ApplyController
     }
     catch (Exception e)
     {
+      errList.add("We could not process your application.");
+
       return new Result("error", model, errList);
     }
     if (!jobseeker.isPremium() && (profile.getStatus().equals(ProfileStatus.INCOMPLETE) ||
@@ -89,43 +100,6 @@ public class ApplyController
 
     return new Result("success", model);
 
-  }
-
-  private HttpResponse applyJobHandler(HttpResponse response,
-                                       Jobseeker jobseeker,
-                                       String resumeName,
-                                       String jobIdString,
-                                       String whichResumeString,
-                                       String makeResumeActiveString)
-  {
-    JobseekerProfile profile = jobseekerProfileManager.getJobSeekerProfile(jobseeker);
-
-    Job job = jobSearchService.getJob(Integer.parseInt(jobIdString));
-
-
-    Result result = getApplicaionResult(jobseeker, resumeName, job, profile, whichResumeString, makeResumeActiveString);
-    response.setResult(result);
-    return response;
-
-  }
-
-
-  private static void provideApplySuccessView(HttpResponse response, Map<String, Object> model)
-  {
-    Result result = new Result("success", model);
-    response.setResult(result);
-  }
-
-  private static void provideResumeCompletionView(HttpResponse response, Map<String, Object> model)
-  {
-    Result result = new Result("completeResumePlease", model);
-    response.setResult(result);
-  }
-
-  private static void provideErrorView(HttpResponse response, List<String> errList, Map<String, Object> model)
-  {
-   Result result = new Result("error", model, errList);
-   response.setResult(result);
   }
 
   private void apply(
@@ -169,12 +143,5 @@ public class ApplyController
     return resume;
   }
 
-  private static void provideInvalidJobView(HttpResponse response, int jobId)
-  {
-    Map<String, Object> model = new HashMap<>();
-    model.put("jobId", jobId);
 
-    Result result = new Result("invalidJob", model);
-    response.setResult(result);
-  }
 }
