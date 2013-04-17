@@ -8,6 +8,8 @@ public class Resume
   {
     if (resumeName == null || resumeName.equals(""))
     {
+      System.out.println(resumeName);
+
       throw new NullPointerException("bad resume name");
     }
 

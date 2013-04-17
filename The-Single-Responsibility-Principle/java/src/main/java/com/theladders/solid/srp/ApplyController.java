@@ -28,6 +28,7 @@ public class ApplyController
   private final JobApplicationSystem    jobApplicationSystem;
   private final ResumeManager           resumeManager;
   private final MyResumeManager         myResumeManager;
+  private static  enum   applicationResult {SUCCESS, RESUMENOTVALID, JOBNOTEXISTED, MISSINGPROFILE};
 
   public ApplyController(JobseekerProfileManager jobseekerProfileManager,
                          JobSearchService jobSearchService,
@@ -56,6 +57,34 @@ public class ApplyController
     return applyJobHandler(response, jobseeker, resumeName, jobIdString, whichResumeString, makeResumeActiveString);
   }
 
+  private applicationResult getApplicaionResult( Jobseeker jobseeker,
+                                            String resumeName,
+                                            Job    job,
+                                            JobseekerProfile profile,
+                                            String whichResumeString,
+                                            String makeResumeActiveString)
+  {
+            if(job == null)
+              return applicationResult.JOBNOTEXISTED;
+    try
+    {
+      Resume resume = saveNewOrRetrieveExistingResume(resumeName,jobseeker, whichResumeString,makeResumeActiveString);
+      apply(jobseeker, job,resume);
+    }
+    catch (Exception e)
+    {
+      return applicationResult.RESUMENOTVALID;
+    }
+    if (!jobseeker.isPremium() && (profile.getStatus().equals(ProfileStatus.INCOMPLETE) ||
+                                   profile.getStatus().equals(ProfileStatus.NO_PROFILE) ||
+                                   profile.getStatus().equals(ProfileStatus.REMOVED)))
+    {
+      return applicationResult.MISSINGPROFILE;
+    }
+
+    return applicationResult.SUCCESS;
+
+  }
 
   private HttpResponse applyJobHandler(HttpResponse response,
                                        Jobseeker jobseeker,
@@ -67,6 +96,10 @@ public class ApplyController
     JobseekerProfile profile = jobseekerProfileManager.getJobSeekerProfile(jobseeker);
 
     Job job = jobSearchService.getJob(Integer.parseInt(jobIdString));
+
+
+    //applicationResult result = getApplicaionResult(jobseeker, resumeName, job, profile, whichResumeString, makeResumeActiveString);
+
     if (job == null)
     {
       provideInvalidJobView(response, Integer.parseInt(jobIdString));
@@ -151,7 +184,7 @@ public class ApplyController
     {
       resume = resumeManager.saveResume(jobseeker, newResumeFileName);
 
-      if (resume != null && "yes".equals(makeResumeActiveString));
+      if (resume != null && "yes".equals(makeResumeActiveString))
       {
         myResumeManager.saveAsActive(jobseeker, resume);
       }
