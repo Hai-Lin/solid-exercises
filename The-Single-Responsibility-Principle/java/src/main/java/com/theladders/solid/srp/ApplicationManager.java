@@ -47,7 +47,12 @@ public class ApplicationManager
 
   public final ApplicationResultSatate getApplicationResult()
   {
-    return ApplicationResultSatate.COMPLETEPROFILEFIRST;
+    if(this.job == null)
+      return ApplicationResultSatate.JOB_NOT_FOUND;
+
+
+
+    return ApplicationResultSatate.SUCCESS;
   }
 
 

@@ -1,7 +1,7 @@
 package com.theladders.solid.srp.job.application;
 
 
-public class JobApplicationSystem
+public class  JobApplicationSystem
 {
   private final JobApplicationRepository repository;
 

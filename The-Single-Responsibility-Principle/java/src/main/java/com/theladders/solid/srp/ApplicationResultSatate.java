@@ -9,7 +9,7 @@ package com.theladders.solid.srp;
  */
 public enum ApplicationResultSatate
 {
-  JOBNOTFOUND,
+  JOB_NOT_FOUND,
   SUCCESS,
-  COMPLETEPROFILEFIRST
+  COMPLETEP_ROFILE_FIRST
 }

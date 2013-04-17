@@ -45,6 +45,15 @@ public class ApplyController
     this.myResumeManager = myResumeManager;
   }
 
+  private HttpResponse handleNullJob(HttpResponse response, String jobIdString)
+  {
+    Map<String, Object> model = new HashMap<>();
+    List<String> errList = new ArrayList<>();
+      model.put("jobId", Integer.parseInt(jobIdString));
+      Result result = new Result("invalidJob", model);
+      response.setResult(result);
+      return response;
+  }
 
   public HttpResponse handle(HttpRequest request,
                              HttpResponse response)
@@ -55,20 +64,16 @@ public class ApplyController
     String resumeName = request.getParameter("resumeName");
     String whichResumeString = request.getParameter("whichResume");
     JobseekerProfile profile = jobseekerProfileManager.getJobSeekerProfile(jobseeker);
+    Job job = jobSearchService.getJob(Integer.parseInt(jobIdString));
+
+    if (job == null)
+      return handleNullJob(response,jobIdString);
 
 
-    try
-    {
-      Resume resume = saveNewOrRetrieveExistingResume(resumeName, jobseeker, whichResumeString, makeResumeActiveString);
-    }
 
-    catch (Exception e)
-    {
-      System.out.println("resume can't be null");
-    }
     Result result = getApplicationResult(jobseeker,
                                          resumeName,
-                                         jobIdString,
+                                         job,
                                          profile,
                                          whichResumeString,
                                          makeResumeActiveString);
@@ -92,21 +97,15 @@ public class ApplyController
 
   private Result getApplicationResult(Jobseeker jobseeker,
                                       String resumeName,
-                                      String jobIdString,
+                                      Job job,
                                       JobseekerProfile profile,
                                       String whichResumeString,
                                       String makeResumeActiveString)
 
   {
-    Job job = jobSearchService.getJob(Integer.parseInt(jobIdString));
     Map<String, Object> model = new HashMap<>();
     List<String> errList = new ArrayList<>();
-    if (job == null)
-    {
-      model.put("jobId", Integer.parseInt(jobIdString));
-      return new Result("invalidJob", model);
 
-    }
     try
     {
       Resume resume = saveNewOrRetrieveExistingResume(resumeName, jobseeker, whichResumeString, makeResumeActiveString);
