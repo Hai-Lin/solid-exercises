@@ -65,12 +65,30 @@ public class ApplyController
     return new Result("invalidJob", model);
 
   }
-  private HttpResponse handleNullJob(HttpResponse response,
-                                     String jobIdString)
+
+
+
+
+  private Result provideApplicationResult(String jobIdString,
+                                          Jobseeker jobSeeker,
+                                          String resumeName,
+                                          String whichResumeString,
+                                          String makeResumeActiveString)
   {
-    Result result = getJobNonExistResult(jobIdString);
-    response.setResult(result);
-    return response;
+
+    Job job = jobSearchService.getJob(Integer.parseInt(jobIdString));
+
+    if (job == null)
+    {
+      return getJobNonExistResult(jobIdString);
+    }
+    ApplicationResultSatate resultSatate = applicationManager.getApplicationResult(jobSeeker,
+                                                                                   resumeName,
+                                                                                   job,
+                                                                                   whichResumeString,
+                                                                                   makeResumeActiveString);
+    return this.resultMap.get(resultSatate);
+
   }
 
 
@@ -82,18 +100,12 @@ public class ApplyController
     String makeResumeActiveString = request.getParameter("makeResumeActive");
     String resumeName = request.getParameter("resumeName");
     String whichResumeString = request.getParameter("whichResume");
-    Job job = jobSearchService.getJob(Integer.parseInt(jobIdString));
-    if (job == null)
-    {
-      return handleNullJob(response, jobIdString);
-    }
-    ApplicationResultSatate resultSatate = applicationManager.getApplicationResult(jobseeker,
-                                                            resumeName,
-                                                            job,
-                                                            whichResumeString,
-                                                            makeResumeActiveString);
-
-    response.setResult(resultMap.get(resultSatate));
+    Result result = provideApplicationResult(jobIdString,
+                                             jobseeker,
+                                             resumeName,
+                                             whichResumeString,
+                                             makeResumeActiveString);
+    response.setResult(result);
     return response;
   }
 
