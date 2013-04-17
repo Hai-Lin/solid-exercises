@@ -44,25 +44,15 @@ public class ApplyController
 
 
 
-  private int getJobId(HttpRequest request)
-  {
-    String jobIdString = request.getParameter("jobId");
-    return Integer.parseInt(jobIdString);
-  }
-
-  private Job getJob(HttpRequest request)
-  {
-    return jobSearchService.getJob(this.getJobId(request));
-  }
 
   public HttpResponse handle(HttpRequest request,
                              HttpResponse response)
   {
     Jobseeker jobseeker = request.getSession().getJobseeker();
-    String resumeName = request.getParameter("resumeName");
     String jobIdString = request.getParameter("jobId");
-    String whichResumeString = request.getParameter("whichResume");
     String makeResumeActiveString = request.getParameter("makeResumeActive");
+    String resumeName = request.getParameter("resumeName");
+    String whichResumeString = request.getParameter("whichResume");
     return applyJobHandler(response, jobseeker, resumeName, jobIdString, whichResumeString, makeResumeActiveString);
   }
 
