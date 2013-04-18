@@ -13,8 +13,6 @@ import com.theladders.solid.srp.view.JobApplicationResultViewGenerator;
 
 public class JobApplicationController
 {
-  private final ResumeManager                     resumeManager;
-  private final MyResumeManager                   myResumeManager;
   private final JobApplicationResultViewGenerator jobApplicationResultViewGenerator;
   private final JobApplicationRequestProcessor    jobApplicationRequestProcessor;
   private final JobApplicationManager             jobApplicationManager;
@@ -27,8 +25,6 @@ public class JobApplicationController
                                   MyResumeManager myResumeManager)
   {
 
-    this.resumeManager = resumeManager;
-    this.myResumeManager = myResumeManager;
     this.jobApplicationManager = new JobApplicationManager(jobseekerProfileManager,
                                                            jobApplicationSystem,
                                                            resumeManager,

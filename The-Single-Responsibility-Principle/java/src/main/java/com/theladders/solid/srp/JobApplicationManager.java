@@ -86,13 +86,13 @@ public class JobApplicationManager
   }
 
 
-  private void apply(
-          Jobseeker jobseeker,
-          Job job,
-          Resume resume)
+  private void apply(Jobseeker jobseeker,
+                     Job job,
+                     Resume resume)
   {
     UnprocessedApplication application = new UnprocessedApplication(jobseeker, job, resume);
-    com.theladders.solid.srp.job.application.JobApplicationResult applicationResult = jobApplicationSystem.apply(application);
+    com.theladders.solid.srp.job.application.JobApplicationResult applicationResult = jobApplicationSystem.apply(
+            application);
     handleApplicationResult(applicationResult);
   }
 
