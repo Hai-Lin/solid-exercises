@@ -50,17 +50,8 @@ public class ApplyController
   public HttpResponse handle(HttpRequest request,
                              HttpResponse response)
   {
-    String jobIdString = request.getParameter("jobId");
-    Jobseeker jobseeker = request.getSession().getJobseeker();
-    String makeResumeActiveString = request.getParameter("makeResumeActive");
-    String resumeName = request.getParameter("resumeName");
-    String whichResumeString = request.getParameter("whichResume");
     ApplicationInfo applicationInfo = processRequest(request, this.jobSearchService);
-    Result result = resultProvider.provideApplicationResult(jobIdString,
-                                                            jobseeker,
-                                                            resumeName,
-                                                            whichResumeString,
-                                                            makeResumeActiveString);
+    Result result = resultProvider.provideApplicationResult(applicationInfo);
     response.setResult(result);
     return response;
   }

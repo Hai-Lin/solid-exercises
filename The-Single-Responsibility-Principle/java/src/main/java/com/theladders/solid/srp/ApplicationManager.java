@@ -2,6 +2,7 @@
 package com.theladders.solid.srp;
 
 
+import java.util.HashMap;
 
 import com.theladders.solid.srp.job.Job;
 import com.theladders.solid.srp.job.application.ApplicationFailureException;
@@ -48,13 +49,12 @@ public class ApplicationManager
   }
 
 
-  public ApplicationResultState getApplicationResult(Jobseeker jobseeker,
-                                                      String resumeName,
-                                                      Job job,
-                                                      String whichResumeString,
-                                                      String makeResumeActiveString)
+  public ApplicationResultState getApplicationResult(ApplicationInfo applicationInfo)
 
   {
+    Job job = applicationInfo.getJob();
+    Jobseeker jobseeker = applicationInfo.getJobSeeker();
+    HashMap<String, String> resumeInfo = applicationInfo.getResumeInfo();
     if (job == null)
     {
       return ApplicationResultState.JOB_NOT_FOUND;
@@ -63,7 +63,7 @@ public class ApplicationManager
 
     try
     {
-      Resume resume = saveNewOrRetrieveExistingResume(resumeName, jobseeker, whichResumeString, makeResumeActiveString);
+      Resume resume = saveNewOrRetrieveExistingResume(resumeInfo, jobseeker);
       apply(jobseeker, job, resume);
     }
     catch (Exception e)
@@ -86,6 +86,7 @@ public class ApplicationManager
     }
   }
 
+
   private void apply(
           Jobseeker jobseeker,
           Job job,
@@ -97,17 +98,14 @@ public class ApplicationManager
   }
 
 
-  private Resume saveNewOrRetrieveExistingResume(String newResumeFileName,
-                                                 Jobseeker jobseeker,
-                                                 String whichResumeString,
-                                                 String makeResumeActiveString)
+  private Resume saveNewOrRetrieveExistingResume(HashMap<String, String> resumeInfo,
+                                                 Jobseeker jobseeker)
   {
     Resume resume;
-
-    if (!"existing".equals(whichResumeString))
+    if (!"existing".equals(resumeInfo.get("whichResumeString")))
     {
-      resume = resumeManager.saveResume(jobseeker, newResumeFileName);
-      if (resume != null && "yes".equals(makeResumeActiveString))
+      resume = resumeManager.saveResume(jobseeker, resumeInfo.get("resumeName"));
+      if (resume != null && "yes".equals(resumeInfo.get("makeResumeActiveString")))
       {
         myResumeManager.saveAsActive(jobseeker, resume);
       }

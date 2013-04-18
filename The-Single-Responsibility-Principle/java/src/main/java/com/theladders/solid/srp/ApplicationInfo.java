@@ -24,9 +24,9 @@ public class ApplicationInfo
     this.jobIdString = jobIdString;
     this.jobSeeker = jobSeeker;
     this.resumeInfo = new HashMap<>();
-    resumeInfo.put(resumeName, resumeName);
-    resumeInfo.put(whichResumeString, whichResumeString);
-    resumeInfo.put(makeResumeActiveString, makeResumeActiveString);
+    resumeInfo.put("resumeName", resumeName);
+    resumeInfo.put("whichResumeString", whichResumeString);
+    resumeInfo.put("makeResumeActiveString", makeResumeActiveString);
     this.job = jobSearchService.getJob(Integer.parseInt(jobIdString));
   }
 
@@ -47,7 +47,7 @@ public class ApplicationInfo
   }
 
 
-  public HashMap getResumeInfo()
+  public HashMap<String, String> getResumeInfo()
   {
     return this.resumeInfo;
   }

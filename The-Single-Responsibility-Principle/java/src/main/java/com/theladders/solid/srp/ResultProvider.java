@@ -61,21 +61,13 @@ public class ResultProvider
   }
 
 
-  public Result provideApplicationResult(String jobIdString,
-                                         Jobseeker jobSeeker,
-                                         String resumeName,
-                                         String whichResumeString,
-                                         String makeResumeActiveString)
+  public Result provideApplicationResult(ApplicationInfo applicationInfo)
   {
-    Job job = jobSearchService.getJob(Integer.parseInt(jobIdString));
-    ApplicationResultState resultState = applicationManager.getApplicationResult(jobSeeker,
-                                                                                   resumeName,
-                                                                                   job,
-                                                                                   whichResumeString,
-                                                                                   makeResumeActiveString);
+    ApplicationResultState resultState = applicationManager.getApplicationResult(applicationInfo);
+    System.out.println(resultState);
     if (resultState == ApplicationResultState.JOB_NOT_FOUND)
     {
-      return getJobNonExistResult(jobIdString);
+      return getJobNonExistResult(applicationInfo.getJobId());
     }
     return this.resultMap.get(resultState);
 
