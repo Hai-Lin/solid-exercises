@@ -6,7 +6,6 @@ import java.util.HashMap;
 
 import com.theladders.solid.srp.job.Job;
 import com.theladders.solid.srp.job.application.ApplicationFailureException;
-import com.theladders.solid.srp.job.application.JobApplicationResult;
 import com.theladders.solid.srp.job.application.JobApplicationSystem;
 import com.theladders.solid.srp.job.application.UnprocessedApplication;
 import com.theladders.solid.srp.jobseeker.JobseekerProfile;
@@ -18,7 +17,7 @@ import com.theladders.solid.srp.resume.Resume;
 import com.theladders.solid.srp.resume.ResumeManager;
 
 
-public class ApplicationManager
+public class JobApplicationManager
 {
 
   private final JobseekerProfileManager jobseekerProfileManager;
@@ -27,10 +26,10 @@ public class ApplicationManager
   private final MyResumeManager         myResumeManager;
 
 
-  public ApplicationManager(JobseekerProfileManager jobseekerProfileManager,
-                            JobApplicationSystem jobApplicationSystem,
-                            ResumeManager resumeManager,
-                            MyResumeManager myResumeManager)
+  public JobApplicationManager(JobseekerProfileManager jobseekerProfileManager,
+                               JobApplicationSystem jobApplicationSystem,
+                               ResumeManager resumeManager,
+                               MyResumeManager myResumeManager)
   {
     this.jobseekerProfileManager = jobseekerProfileManager;
     this.jobApplicationSystem = jobApplicationSystem;
@@ -49,15 +48,15 @@ public class ApplicationManager
   }
 
 
-  public ApplicationResultState getApplicationResult(ApplicationInfo applicationInfo)
+  public JobApplicationResults getApplicationResult(JobApplicationInfo jobApplicationInfo)
 
   {
-    Job job = applicationInfo.getJob();
-    Jobseeker jobseeker = applicationInfo.getJobSeeker();
-    HashMap<String, String> resumeInfo = applicationInfo.getResumeInfo();
+    Job job = jobApplicationInfo.getJob();
+    Jobseeker jobseeker = jobApplicationInfo.getJobSeeker();
+    HashMap<String, String> resumeInfo = jobApplicationInfo.getResumeInfo();
     if (job == null)
     {
-      return ApplicationResultState.JOB_NOT_FOUND;
+      return JobApplicationResults.JOB_NOT_FOUND;
     }
     JobseekerProfile profile = jobseekerProfileManager.getJobSeekerProfile(jobseeker);
 
@@ -68,17 +67,17 @@ public class ApplicationManager
     }
     catch (Exception e)
     {
-      return ApplicationResultState.INVALID;
+      return JobApplicationResults.INVALID;
     }
     if (isResumeCompleteByPremiumUser(jobseeker, profile))
     {
-      return ApplicationResultState.RESUME_NOT_COMPLETE;
+      return JobApplicationResults.RESUME_NOT_COMPLETE;
     }
-    return ApplicationResultState.SUCCESS;
+    return JobApplicationResults.SUCCESS;
   }
 
 
-  private void handleApplicationResult(JobApplicationResult result)
+  private void handleApplicationResult(com.theladders.solid.srp.job.application.JobApplicationResult result)
   {
     if (result.failure())
     {
@@ -93,7 +92,7 @@ public class ApplicationManager
           Resume resume)
   {
     UnprocessedApplication application = new UnprocessedApplication(jobseeker, job, resume);
-    JobApplicationResult applicationResult = jobApplicationSystem.apply(application);
+    com.theladders.solid.srp.job.application.JobApplicationResult applicationResult = jobApplicationSystem.apply(application);
     handleApplicationResult(applicationResult);
   }
 

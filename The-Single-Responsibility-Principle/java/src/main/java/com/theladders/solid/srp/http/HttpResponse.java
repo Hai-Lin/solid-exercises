@@ -1,18 +1,20 @@
 package com.theladders.solid.srp.http;
 
-import com.theladders.solid.srp.Result;
+import com.theladders.solid.srp.JobApplicationResultView;
 
 public class HttpResponse
 {
-  private Result result;
+  private JobApplicationResultView jobApplicationResultView;
+
 
   public String getResultType()
   {
-    return result.getType();
+    return jobApplicationResultView.getType();
   }
 
-  public void setResult(Result result)
+
+  public void setJobApplicationResultView(JobApplicationResultView jobApplicationResultView)
   {
-    this.result = result;
+    this.jobApplicationResultView = jobApplicationResultView;
   }
 }

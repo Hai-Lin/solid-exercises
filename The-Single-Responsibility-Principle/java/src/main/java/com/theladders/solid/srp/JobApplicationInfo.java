@@ -6,7 +6,7 @@ import com.theladders.solid.srp.job.JobSearchService;
 import com.theladders.solid.srp.jobseeker.Jobseeker;
 import com.theladders.solid.srp.job.Job;
 
-public class ApplicationInfo
+public class JobApplicationInfo
 {
   private final String                  jobIdString;
   private final Jobseeker               jobSeeker;
@@ -14,20 +14,12 @@ public class ApplicationInfo
   private final Job                     job;
 
 
-  public ApplicationInfo(String jobIdString,
-                         Jobseeker jobSeeker,
-                         String makeResumeActiveString,
-                         String resumeName,
-                         String whichResumeString,
-                         JobSearchService jobSearchService)
+  public JobApplicationInfo(String jobIdString, Jobseeker jobseeker, HashMap<String, String> resumeInfo, Job job)
   {
     this.jobIdString = jobIdString;
-    this.jobSeeker = jobSeeker;
-    this.resumeInfo = new HashMap<>();
-    resumeInfo.put("resumeName", resumeName);
-    resumeInfo.put("whichResumeString", whichResumeString);
-    resumeInfo.put("makeResumeActiveString", makeResumeActiveString);
-    this.job = jobSearchService.getJob(Integer.parseInt(jobIdString));
+    this.job = job;
+    this.resumeInfo = resumeInfo;
+    this.jobSeeker = jobseeker;
   }
 
 
