@@ -61,6 +61,7 @@ public class ApplicationManager
       return ApplicationResultSatate.JOB_NOT_FOUND;
     }
     JobseekerProfile profile = jobseekerProfileManager.getJobSeekerProfile(jobseeker);
+
     try
     {
       Resume resume = saveNewOrRetrieveExistingResume(resumeName, jobseeker, whichResumeString, makeResumeActiveString);

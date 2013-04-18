@@ -23,6 +23,8 @@ public class ApplyController
 
   private final HashMap<ApplicationResultSatate, Result> resultMap;
   private final ApplicationManager                       applicationManager;
+  private final ResumeManager                            resumeManager;
+  private final MyResumeManager                          myResumeManager;
 
 
   public ApplyController(JobseekerProfileManager jobseekerProfileManager,
@@ -39,6 +41,8 @@ public class ApplyController
                                                      jobApplicationSystem,
                                                      resumeManager,
                                                      myResumeManager);
+    this.resumeManager = resumeManager;
+    this.myResumeManager = myResumeManager;
   }
 
 
@@ -66,8 +70,6 @@ public class ApplyController
   }
 
 
-
-
   private Result provideApplicationResult(String jobIdString,
                                           Jobseeker jobSeeker,
                                           String resumeName,
@@ -80,8 +82,10 @@ public class ApplyController
                                                                                    job,
                                                                                    whichResumeString,
                                                                                    makeResumeActiveString);
-    if(resultSatate == ApplicationResultSatate.JOB_NOT_FOUND)
+    if (resultSatate == ApplicationResultSatate.JOB_NOT_FOUND)
+    {
       return getJobNonExistResult(jobIdString);
+    }
     return this.resultMap.get(resultSatate);
 
   }
@@ -95,6 +99,13 @@ public class ApplyController
     String makeResumeActiveString = request.getParameter("makeResumeActive");
     String resumeName = request.getParameter("resumeName");
     String whichResumeString = request.getParameter("whichResume");
+    ApplicatoinInfo applicatoinInfo = new ApplicatoinInfo(jobIdString,
+                                                          jobseeker,
+                                                          makeResumeActiveString,
+                                                          resumeName,
+                                                          whichResumeString,
+                                                          this.resumeManager,
+                                                          this.myResumeManager);
     Result result = provideApplicationResult(jobIdString,
                                              jobseeker,
                                              resumeName,
