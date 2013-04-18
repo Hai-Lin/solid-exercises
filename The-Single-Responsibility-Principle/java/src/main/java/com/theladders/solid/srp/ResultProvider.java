@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
-import com.theladders.solid.srp.http.HttpRequest;
-import com.theladders.solid.srp.http.HttpResponse;
 import com.theladders.solid.srp.job.Job;
 import com.theladders.solid.srp.job.JobSearchService;
 import com.theladders.solid.srp.job.application.JobApplicationSystem;
@@ -14,14 +12,13 @@ import com.theladders.solid.srp.jobseeker.JobseekerProfileManager;
 import com.theladders.solid.srp.jobseeker.Jobseeker;
 import com.theladders.solid.srp.resume.MyResumeManager;
 import com.theladders.solid.srp.resume.ResumeManager;
-import com.theladders.solid.srp.ApplicationResultSatate;
 
 public class ResultProvider
 {
   private final JobSearchService jobSearchService;
 
-  private final HashMap<ApplicationResultSatate, Result> resultMap;
-  private final ApplicationManager                       applicationManager;
+  private final HashMap<ApplicationResultState, Result> resultMap;
+  private final ApplicationManager                      applicationManager;
 
 
   ResultProvider(JobSearchService jobSearchService,
@@ -45,13 +42,13 @@ public class ResultProvider
     Map<String, Object> model = new HashMap<>();
     List<String> errList = new ArrayList<>();
     Result success = new Result("success", model);
-    this.resultMap.put(ApplicationResultSatate.SUCCESS, success);
+    this.resultMap.put(ApplicationResultState.SUCCESS, success);
     Result resumeNotComplete = new Result("completeResumePlease", model);
-    this.resultMap.put(ApplicationResultSatate.RESUME_NOT_COMPLETE, resumeNotComplete);
+    this.resultMap.put(ApplicationResultState.RESUME_NOT_COMPLETE, resumeNotComplete);
     errList.add("We could not process your application.");
     Result error = new Result("error", model, errList);
     errList.clear();
-    this.resultMap.put(ApplicationResultSatate.INVALID, error);
+    this.resultMap.put(ApplicationResultState.INVALID, error);
   }
 
 
@@ -71,16 +68,16 @@ public class ResultProvider
                                          String makeResumeActiveString)
   {
     Job job = jobSearchService.getJob(Integer.parseInt(jobIdString));
-    ApplicationResultSatate resultSatate = applicationManager.getApplicationResult(jobSeeker,
+    ApplicationResultState resultState = applicationManager.getApplicationResult(jobSeeker,
                                                                                    resumeName,
                                                                                    job,
                                                                                    whichResumeString,
                                                                                    makeResumeActiveString);
-    if (resultSatate == ApplicationResultSatate.JOB_NOT_FOUND)
+    if (resultState == ApplicationResultState.JOB_NOT_FOUND)
     {
       return getJobNonExistResult(jobIdString);
     }
-    return this.resultMap.get(resultSatate);
+    return this.resultMap.get(resultState);
 
   }
 }

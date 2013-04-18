@@ -3,7 +3,6 @@ package com.theladders.solid.srp;
 
 
 
-import com.theladders.solid.srp.ApplicationResultSatate;
 import com.theladders.solid.srp.job.Job;
 import com.theladders.solid.srp.job.application.ApplicationFailureException;
 import com.theladders.solid.srp.job.application.JobApplicationResult;
@@ -49,7 +48,7 @@ public class ApplicationManager
   }
 
 
-  public ApplicationResultSatate getApplicationResult(Jobseeker jobseeker,
+  public ApplicationResultState getApplicationResult(Jobseeker jobseeker,
                                                       String resumeName,
                                                       Job job,
                                                       String whichResumeString,
@@ -58,7 +57,7 @@ public class ApplicationManager
   {
     if (job == null)
     {
-      return ApplicationResultSatate.JOB_NOT_FOUND;
+      return ApplicationResultState.JOB_NOT_FOUND;
     }
     JobseekerProfile profile = jobseekerProfileManager.getJobSeekerProfile(jobseeker);
 
@@ -69,13 +68,13 @@ public class ApplicationManager
     }
     catch (Exception e)
     {
-      return ApplicationResultSatate.INVALID;
+      return ApplicationResultState.INVALID;
     }
     if (isResumeCompleteByPremiumUser(jobseeker, profile))
     {
-      return ApplicationResultSatate.RESUME_NOT_COMPLETE;
+      return ApplicationResultState.RESUME_NOT_COMPLETE;
     }
-    return ApplicationResultSatate.SUCCESS;
+    return ApplicationResultState.SUCCESS;
   }
 
 
