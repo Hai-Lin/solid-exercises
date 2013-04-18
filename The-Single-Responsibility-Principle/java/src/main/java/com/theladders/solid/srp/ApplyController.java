@@ -35,21 +35,7 @@ public class ApplyController
   }
 
 
-  private ApplicatoinInfo getApplicationInfo(HttpRequest request)
-  {
-    String jobIdString = request.getParameter("jobId");
-    Jobseeker jobseeker = request.getSession().getJobseeker();
-    String makeResumeActiveString = request.getParameter("makeResumeActive");
-    String resumeName = request.getParameter("resumeName");
-    String whichResumeString = request.getParameter("whichResume");
-    return new ApplicatoinInfo(jobIdString,
-                               jobseeker,
-                               makeResumeActiveString,
-                               resumeName,
-                               whichResumeString,
-                               this.resumeManager,
-                               this.myResumeManager);
-  }
+
 
 
   public HttpResponse handle(HttpRequest request,
