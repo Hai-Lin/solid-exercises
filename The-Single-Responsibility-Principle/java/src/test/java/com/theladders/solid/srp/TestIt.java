@@ -29,20 +29,21 @@ import com.theladders.solid.srp.resume.ResumeRepository;
 
 public class TestIt
 {
-  private static final int INVALID_JOB_ID        = 555;
-  private static final String SHARED_RESUME_NAME = "A Resume";
-  private static final int JOBSEEKER_WITH_RESUME = 777;
-  private static final int INCOMPLETE_JOBSEEKER  = 888;
-  private static final int APPROVED_JOBSEEKER    = 1010;
+  private static final int    INVALID_JOB_ID        = 555;
+  private static final String SHARED_RESUME_NAME    = "A Resume";
+  private static final int    JOBSEEKER_WITH_RESUME = 777;
+  private static final int    INCOMPLETE_JOBSEEKER  = 888;
+  private static final int    APPROVED_JOBSEEKER    = 1010;
 
-  private ApplyController            controller;
+  private JobApplicationController   controller;
   private JobRepository              jobRepository;
   private ResumeRepository           resumeRepository;
   private JobApplicationRepository   jobApplicationRepository;
   private JobseekerProfileRepository jobseekerProfileRepository;
   private ActiveResumeRepository     activeResumeRepository;
 
-  private SuccessfulApplication      existingApplication;
+  private SuccessfulApplication existingApplication;
+
 
   @Test
   public void requestWithValidJob()
@@ -51,7 +52,7 @@ public class TestIt
     HttpSession session = new HttpSession(JOBSEEKER);
 
     Map<String, String> parameters = new HashMap<>();
-    parameters.put("jobId","5");
+    parameters.put("jobId", "5");
     parameters.put("resumeName", SHARED_RESUME_NAME);
 
     HttpRequest request = new HttpRequest(session, parameters);
@@ -62,6 +63,7 @@ public class TestIt
 
     assertEquals("success", response.getResultType());
   }
+
 
   @Test
   public void requestWithValidJobByBasic()
@@ -70,7 +72,7 @@ public class TestIt
     HttpSession session = new HttpSession(JOBSEEKER);
 
     Map<String, String> parameters = new HashMap<>();
-    parameters.put("jobId","5");
+    parameters.put("jobId", "5");
     parameters.put("resumeName", SHARED_RESUME_NAME);
 
 
@@ -82,6 +84,7 @@ public class TestIt
 
     assertEquals("success", response.getResultType());
   }
+
 
   @Test
   public void applyUsingExistingResume()
@@ -310,7 +313,7 @@ public class TestIt
     ResumeManager resumeManager = new ResumeManager(resumeRepository);
     MyResumeManager myResumeManager = new MyResumeManager(activeResumeRepository);
 
-    controller = new ApplyController(jobseekerProfileManager,
+    controller = new JobApplicationController(jobseekerProfileManager,
                                      jobSearchService,
                                      jobApplicationSystem,
                                      resumeManager,

@@ -9,7 +9,7 @@ import com.theladders.solid.srp.jobseeker.JobseekerProfileManager;
 import com.theladders.solid.srp.resume.MyResumeManager;
 import com.theladders.solid.srp.resume.ResumeManager;
 
-public class ApplyController
+public class JobApplicationController
 {
   private final ResumeManager                    resumeManager;
   private final MyResumeManager                  myResumeManager;
@@ -18,11 +18,11 @@ public class ApplyController
   private final JobApplicationRequestProcessor   jobApplicationRequestProcessor;
 
 
-  public ApplyController(JobseekerProfileManager jobseekerProfileManager,
-                         JobSearchService jobSearchService,
-                         JobApplicationSystem jobApplicationSystem,
-                         ResumeManager resumeManager,
-                         MyResumeManager myResumeManager)
+  public JobApplicationController(JobseekerProfileManager jobseekerProfileManager,
+                                  JobSearchService jobSearchService,
+                                  JobApplicationSystem jobApplicationSystem,
+                                  ResumeManager resumeManager,
+                                  MyResumeManager myResumeManager)
   {
 
     this.jobSearchService = jobSearchService;
