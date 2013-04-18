@@ -1,10 +1,13 @@
-package com.theladders.solid.srp;
+package com.theladders.solid.srp.view;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
+import com.theladders.solid.srp.JobApplicationInfo;
+import com.theladders.solid.srp.JobApplicationManager;
+import com.theladders.solid.srp.JobApplicationResults;
 import com.theladders.solid.srp.job.JobSearchService;
 import com.theladders.solid.srp.job.application.JobApplicationSystem;
 import com.theladders.solid.srp.jobseeker.JobseekerProfileManager;
@@ -19,7 +22,7 @@ public class JobApplicationResultViewProvider
   private final JobApplicationManager                                    jobApplicationManager;
 
 
-  JobApplicationResultViewProvider(JobSearchService jobSearchService,
+  public JobApplicationResultViewProvider(JobSearchService jobSearchService,
                                    ResumeManager resumeManager,
                                    MyResumeManager myResumeManager,
                                    JobApplicationSystem jobApplicationSystem,
@@ -29,8 +32,8 @@ public class JobApplicationResultViewProvider
     setResultMap();
     this.jobSearchService = jobSearchService;
     this.jobApplicationManager = new JobApplicationManager(jobseekerProfileManager,
-                                                     jobApplicationSystem,
-                                                     resumeManager,
+                                                           jobApplicationSystem,
+                                                           resumeManager,
                                                      myResumeManager);
   }
 

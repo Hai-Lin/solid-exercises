@@ -1,6 +1,6 @@
 package com.theladders.solid.srp.http;
 
-import com.theladders.solid.srp.JobApplicationResultView;
+import com.theladders.solid.srp.view.JobApplicationResultView;
 
 public class HttpResponse
 {

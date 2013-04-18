@@ -8,6 +8,8 @@ import com.theladders.solid.srp.job.application.JobApplicationSystem;
 import com.theladders.solid.srp.jobseeker.JobseekerProfileManager;
 import com.theladders.solid.srp.resume.MyResumeManager;
 import com.theladders.solid.srp.resume.ResumeManager;
+import com.theladders.solid.srp.view.JobApplicationResultView;
+import com.theladders.solid.srp.view.JobApplicationResultViewProvider;
 
 public class JobApplicationController
 {
@@ -29,7 +31,7 @@ public class JobApplicationController
     this.resumeManager = resumeManager;
     this.myResumeManager = myResumeManager;
     this.jobApplicationResultViewProvider = new JobApplicationResultViewProvider(jobSearchService,
-                                             resumeManager,
+                                                                                 resumeManager,
                                              myResumeManager,
                                              jobApplicationSystem,
                                              jobseekerProfileManager);
