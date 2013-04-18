@@ -48,7 +48,7 @@ public class JobApplicationManager
   }
 
 
-  public JobApplicationResults getApplicationResult(JobApplicationInfo jobApplicationInfo)
+  public JobApplicationResultStatus getApplicationResult(JobApplicationInfo jobApplicationInfo)
 
   {
     Job job = jobApplicationInfo.getJob();
@@ -56,7 +56,7 @@ public class JobApplicationManager
     HashMap<String, String> resumeInfo = jobApplicationInfo.getResumeInfo();
     if (job == null)
     {
-      return JobApplicationResults.JOB_NOT_FOUND;
+      return JobApplicationResultStatus.JOB_NOT_FOUND;
     }
     JobseekerProfile profile = jobseekerProfileManager.getJobSeekerProfile(jobseeker);
 
@@ -67,13 +67,13 @@ public class JobApplicationManager
     }
     catch (Exception e)
     {
-      return JobApplicationResults.INVALID;
+      return JobApplicationResultStatus.INVALID;
     }
     if (isResumeCompleteByPremiumUser(jobseeker, profile))
     {
-      return JobApplicationResults.RESUME_NOT_COMPLETE;
+      return JobApplicationResultStatus.RESUME_NOT_COMPLETE;
     }
-    return JobApplicationResults.SUCCESS;
+    return JobApplicationResultStatus.SUCCESS;
   }
 
 

@@ -1,7 +1,7 @@
 package com.theladders.solid.srp;
 
 
-public enum JobApplicationResults
+public enum JobApplicationResultStatus
 {
   JOB_NOT_FOUND,
   SUCCESS,
