@@ -14,7 +14,7 @@ import com.theladders.solid.srp.jobseeker.JobseekerProfileManager;
 import com.theladders.solid.srp.resume.MyResumeManager;
 import com.theladders.solid.srp.resume.ResumeManager;
 
-public class JobApplicationResultViewProvider
+public class JobApplicationResultViewController
 {
   private final JobSearchService jobSearchService;
 
@@ -22,11 +22,11 @@ public class JobApplicationResultViewProvider
   private final JobApplicationManager                                    jobApplicationManager;
 
 
-  public JobApplicationResultViewProvider(JobSearchService jobSearchService,
-                                   ResumeManager resumeManager,
-                                   MyResumeManager myResumeManager,
-                                   JobApplicationSystem jobApplicationSystem,
-                                   JobseekerProfileManager jobseekerProfileManager)
+  public JobApplicationResultViewController(JobSearchService jobSearchService,
+                                            ResumeManager resumeManager,
+                                            MyResumeManager myResumeManager,
+                                            JobApplicationSystem jobApplicationSystem,
+                                            JobseekerProfileManager jobseekerProfileManager)
   {
     this.resultMap = new HashMap<>();
     setResultMap();

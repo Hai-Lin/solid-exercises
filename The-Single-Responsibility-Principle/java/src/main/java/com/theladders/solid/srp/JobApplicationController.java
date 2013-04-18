@@ -9,15 +9,15 @@ import com.theladders.solid.srp.jobseeker.JobseekerProfileManager;
 import com.theladders.solid.srp.resume.MyResumeManager;
 import com.theladders.solid.srp.resume.ResumeManager;
 import com.theladders.solid.srp.view.JobApplicationResultView;
-import com.theladders.solid.srp.view.JobApplicationResultViewProvider;
+import com.theladders.solid.srp.view.JobApplicationResultViewController;
 
 public class JobApplicationController
 {
-  private final ResumeManager                    resumeManager;
-  private final MyResumeManager                  myResumeManager;
-  private final JobApplicationResultViewProvider jobApplicationResultViewProvider;
-  private final JobSearchService                 jobSearchService;
-  private final JobApplicationRequestProcessor   jobApplicationRequestProcessor;
+  private final ResumeManager                      resumeManager;
+  private final MyResumeManager                    myResumeManager;
+  private final JobApplicationResultViewController jobApplicationResultViewController;
+  private final JobSearchService                   jobSearchService;
+  private final JobApplicationRequestProcessor     jobApplicationRequestProcessor;
 
 
   public JobApplicationController(JobseekerProfileManager jobseekerProfileManager,
@@ -30,11 +30,11 @@ public class JobApplicationController
     this.jobSearchService = jobSearchService;
     this.resumeManager = resumeManager;
     this.myResumeManager = myResumeManager;
-    this.jobApplicationResultViewProvider = new JobApplicationResultViewProvider(jobSearchService,
-                                                                                 resumeManager,
-                                             myResumeManager,
-                                             jobApplicationSystem,
-                                             jobseekerProfileManager);
+    this.jobApplicationResultViewController = new JobApplicationResultViewController(jobSearchService,
+                                                                                     resumeManager,
+                                                                                 myResumeManager,
+                                                                                 jobApplicationSystem,
+                                                                                 jobseekerProfileManager);
     this.jobApplicationRequestProcessor = new JobApplicationRequestProcessor(jobSearchService);
   }
 
@@ -43,7 +43,8 @@ public class JobApplicationController
                              HttpResponse response)
   {
     JobApplicationInfo jobApplicationInfo = jobApplicationRequestProcessor.processJobApplicationRequest(request);
-    JobApplicationResultView jobApplicationResultView = jobApplicationResultViewProvider.provideApplicationResult(jobApplicationInfo);
+    JobApplicationResultView jobApplicationResultView = jobApplicationResultViewController.provideApplicationResult(
+            jobApplicationInfo);
     response.setJobApplicationResultView(jobApplicationResultView);
     return response;
   }

@@ -2,7 +2,6 @@ package com.theladders.solid.srp;
 
 import java.util.HashMap;
 
-import com.theladders.solid.srp.job.JobSearchService;
 import com.theladders.solid.srp.jobseeker.Jobseeker;
 import com.theladders.solid.srp.job.Job;
 
