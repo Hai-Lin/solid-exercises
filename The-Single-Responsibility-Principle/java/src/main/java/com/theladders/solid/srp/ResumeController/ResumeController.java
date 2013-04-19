@@ -2,12 +2,11 @@ package com.theladders.solid.srp.ResumeController;
 
 
 import java.util.HashMap;
-
 import com.theladders.solid.srp.jobseeker.Jobseeker;
-import com.theladders.solid.srp.resume.MyResumeManager;
 import com.theladders.solid.srp.resume.Resume;
 import com.theladders.solid.srp.resume.ResumeManager;
-import com.theladders.solid.srp.jobseeker.Jobseeker;
+import com.theladders.solid.srp.resume.MyResumeManager;
+
 
 public class ResumeController
 {
@@ -28,7 +27,6 @@ public class ResumeController
     Resume resume = saveNewOrRetrieveExistingResume(resumeInfo, jobseeker);
     return new ResumeProcessResult(resume, ResumeProcessResultStatus.SUCCESS);
   }
-
 
 
   private boolean isResumeInvalid(HashMap<String ,String> resumeInfo)

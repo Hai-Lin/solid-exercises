@@ -1,22 +1,22 @@
-
 package com.theladders.solid.srp;
 
 
 import java.util.HashMap;
 
-import com.theladders.solid.srp.ResumeController.ResumeController;
-import com.theladders.solid.srp.ResumeController.ResumeProcessResult;
+
 import com.theladders.solid.srp.job.Job;
 import com.theladders.solid.srp.job.application.ApplicationFailureException;
 import com.theladders.solid.srp.job.application.JobApplicationSystem;
 import com.theladders.solid.srp.job.application.UnprocessedApplication;
 import com.theladders.solid.srp.jobseeker.JobseekerProfile;
 import com.theladders.solid.srp.jobseeker.JobseekerProfileManager;
-import com.theladders.solid.srp.jobseeker.ProfileStatus;
 import com.theladders.solid.srp.jobseeker.Jobseeker;
+import com.theladders.solid.srp.jobseeker.ProfileStatus;
 import com.theladders.solid.srp.resume.MyResumeManager;
 import com.theladders.solid.srp.resume.Resume;
 import com.theladders.solid.srp.resume.ResumeManager;
+import com.theladders.solid.srp.ResumeController.ResumeController;
+import com.theladders.solid.srp.ResumeController.ResumeProcessResult;
 
 
 public class JobApplicationManager
@@ -54,11 +54,7 @@ public class JobApplicationManager
     Job job = jobApplicationInfo.getJob();
     Jobseeker jobseeker = jobApplicationInfo.getJobSeeker();
     HashMap<String, String> resumeInfo = jobApplicationInfo.getResumeInfo();
-    if (job == null)
-    {
-      return JobApplicationResultStatus.JOB_NOT_FOUND;
-    }
-    JobseekerProfile profile = jobseekerProfileManager.getJobSeekerProfile(jobseeker);
+
 
     ResumeProcessResult resumeProcessResult = resumeController.processResume(resumeInfo, jobseeker);
     if (!resumeProcessResult.isResumeValid())
@@ -67,7 +63,11 @@ public class JobApplicationManager
     }
     Resume resume = resumeProcessResult.getResume();
 
-
+    if (job == null)
+    {
+      return JobApplicationResultStatus.JOB_NOT_FOUND;
+    }
+    JobseekerProfile profile = jobseekerProfileManager.getJobSeekerProfile(jobseeker);
     try
     {
       apply(jobseeker, job, resume);
