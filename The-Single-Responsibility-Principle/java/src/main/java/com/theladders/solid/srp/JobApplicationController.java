@@ -38,7 +38,7 @@ public class JobApplicationController
                              HttpResponse response)
   {
     JobApplicationInfo jobApplicationInfo = jobApplicationRequestProcessor.processJobApplicationRequest(request);
-    JobApplicationResultStatus resultStatus = jobApplicationManager.getApplicationResult(jobApplicationInfo);
+    JobApplicationResultStatus resultStatus = jobApplicationManager.processJobApplication(jobApplicationInfo);
     JobApplicationResultView jobApplicationResultView = jobApplicationResultViewGenerator.generateJobApplicationResultView(jobApplicationInfo,resultStatus);
     response.setJobApplicationResultView(jobApplicationResultView);
     return response;

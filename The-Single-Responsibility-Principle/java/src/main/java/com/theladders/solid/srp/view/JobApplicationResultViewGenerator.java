@@ -32,10 +32,7 @@ public class JobApplicationResultViewGenerator
       return new JobApplicationResultView("error", model, errList);
     }
 
-    if (jobApplicationResultStatus == JobApplicationResultStatus.RESUME_NOT_COMPLETE)
-    {
-      return new JobApplicationResultView("completeResumePlease", model);
-    }
-    return null;
+    return new JobApplicationResultView("completeResumePlease", model);
+
   }
 }

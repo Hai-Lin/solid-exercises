@@ -48,7 +48,7 @@ public class JobApplicationManager
   }
 
 
-  public JobApplicationResultStatus getApplicationResult(JobApplicationInfo jobApplicationInfo)
+  public JobApplicationResultStatus processJobApplication(JobApplicationInfo jobApplicationInfo)
 
   {
     Job job = jobApplicationInfo.getJob();
