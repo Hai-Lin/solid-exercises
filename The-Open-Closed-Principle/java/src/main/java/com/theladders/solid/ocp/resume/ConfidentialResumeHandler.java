@@ -1,6 +1,6 @@
 package com.theladders.solid.ocp.resume;
 
-import com.theladders.solid.ocp.jobseeker.JobseekerConfidentialityProfile;
+import com.theladders.solid.ocp.jobseeker.JobseekerConfidentialityProfiles;
 import com.theladders.solid.ocp.jobseeker.JobseekerConfidentialityProfileDao;
 import com.theladders.solid.ocp.user.User;
 
@@ -19,16 +19,9 @@ public class ConfidentialResumeHandler
   public void makeAllCategoriesNonConfidential(User user)
   {
     JobseekerProfile jsp = jobSeekerProfileManager.getJobSeekerProfile(user);
-    JobseekerConfidentialityProfile profile = jobseekerConfidentialityProfileDao.fetchJobSeekerConfidentialityProfile(jsp.getId());
+    JobseekerConfidentialityProfiles profile = jobseekerConfidentialityProfileDao.fetchJobSeekerConfidentialityProfile(jsp.getId());
 
-    boolean isChanged = false;
-    isChanged = profile.resetConfidentialFlagsForCategory(ConfidentialPhraseCategory.Name) || isChanged;
-    isChanged = profile.resetConfidentialFlagsForCategory(ConfidentialPhraseCategory.PhoneNumber) || isChanged;
-    isChanged = profile.resetConfidentialFlagsForCategory(ConfidentialPhraseCategory.EmailAddress) || isChanged;
-    isChanged = profile.resetConfidentialFlagsForCategory(ConfidentialPhraseCategory.MailingAddress) || isChanged;
-    isChanged = profile.resetConfidentialFlagsForCategory(ConfidentialPhraseCategory.ContactInfo) || isChanged;
-    isChanged = profile.resetConfidentialFlagsForCategory(ConfidentialPhraseCategory.CompanyName) || isChanged;
-    isChanged = profile.resetConfidentialFlagsForCategory(ConfidentialPhraseCategory.WorkExperience) || isChanged;
+    boolean isChanged = profile.resetAllConfidentialFlags();
 
     if (isChanged)
     {
@@ -39,12 +32,8 @@ public class ConfidentialResumeHandler
   public void makeAllContactInfoNonConfidential(User user)
   {
     JobseekerProfile jsp = jobSeekerProfileManager.getJobSeekerProfile(user);
-    JobseekerConfidentialityProfile profile = jobseekerConfidentialityProfileDao.fetchJobSeekerConfidentialityProfile(jsp.getId());
-    boolean isChanged = false;
-    isChanged = profile.resetConfidentialFlagsForCategory(ConfidentialPhraseCategory.PhoneNumber) || isChanged;
-    isChanged = profile.resetConfidentialFlagsForCategory(ConfidentialPhraseCategory.EmailAddress) || isChanged;
-    isChanged = profile.resetConfidentialFlagsForCategory(ConfidentialPhraseCategory.MailingAddress) || isChanged;
-    isChanged = profile.resetConfidentialFlagsForCategory(ConfidentialPhraseCategory.ContactInfo) || isChanged;
+    JobseekerConfidentialityProfiles profile = jobseekerConfidentialityProfileDao.fetchJobSeekerConfidentialityProfile(jsp.getId());
+    boolean isChanged = profile.resetAllContactInfoConfidentialFlags();
 
     if (isChanged)
     {
@@ -54,7 +43,7 @@ public class ConfidentialResumeHandler
 
   @SuppressWarnings("unused")
   private void generatePermanentConfidentialFiles(User user,
-                                                  JobseekerConfidentialityProfile profile)
+                                                  JobseekerConfidentialityProfiles profile)
   {
     // stub
   }

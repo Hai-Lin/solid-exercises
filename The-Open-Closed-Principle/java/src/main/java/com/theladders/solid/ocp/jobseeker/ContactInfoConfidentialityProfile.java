@@ -1,20 +1,16 @@
 package com.theladders.solid.ocp.jobseeker;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.theladders.solid.ocp.resume.ConfidentialPhrase;
 
-public abstract class JobseekerConfidentialityProfile
+public class ContactInfoConfidentialityProfile extends JobseekerConfidentialityProfile
 {
-  protected List<ConfidentialPhrase> confidentialPhrases;
-
-  public JobseekerConfidentialityProfile()
+  public ContactInfoConfidentialityProfile()
   {
-    this.confidentialPhrases = new ArrayList<>();
+    super();
   }
-  public boolean resetConfidentialFlags()
+
+  public boolean resetContactInfoConfidentialFlags()
   {
     boolean isChanged = false;
     for (ConfidentialPhrase phrase : this.confidentialPhrases)
@@ -27,8 +23,4 @@ public abstract class JobseekerConfidentialityProfile
     }
     return isChanged;
   }
-
-  public abstract boolean resetContactInfoConfidentialFlags();
-
 }
-
