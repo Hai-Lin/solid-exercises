@@ -14,38 +14,52 @@ public class ConfidentialityCategoryManager
   }
 
 
-  public ConfidentialityCategory getConfidentialityCategoryById(int id)
+  public ConfidentialityCategory getConfidentialityCategory(String name)
   {
     for (ConfidentialityCategory category : this.confidentialityCategories)
     {
-      if (category.getCategoryId() == id)
+      if (category.getName().equals(name))
       {
         return category;
       }
     }
-
     return null;
+  }
 
+
+  private boolean isCategoryExist(String name)
+  {
+    for (ConfidentialityCategory category : this.confidentialityCategories)
+    {
+      if (category.getName().equals(name))
+      {
+        return true;
+      }
+    }
+    return false;
   }
 
 
   public void createNewCategory(String name)
   {
-    ConfidentialityCategory confidentialityCategory = new ConfidentialityCategory(confidentialityCategories.size(),
-                                                                                  name);
+    if (isCategoryExist(name))
+    {
+      throw new IllegalArgumentException("Name is already existed!");
+    }
+    ConfidentialityCategory confidentialityCategory = new ConfidentialityCategory(name);
+    this.confidentialityCategories.add(confidentialityCategory);
   }
 
 
   public void addTypeToCategory(int typeId,
-                                int categoryId)
+                                String name)
   {
-    ConfidentialityCategory confidentialityCategory = getConfidentialityCategoryById(categoryId);
+    ConfidentialityCategory confidentialityCategory = getConfidentialityCategory(name);
     if (confidentialityCategory != null)
     {
       confidentialityCategory.addConfidentialityPhraseCategoryId(typeId);
     }
   }
-
 
 
 }

@@ -1,11 +1,8 @@
 package com.theladders.solid.ocp.jobseeker;
 
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import com.theladders.solid.ocp.jobseeker.ConfidentialityCategory.ConfidentialityCategory;
 import com.theladders.solid.ocp.jobseeker.ConfidentialityCategory.ConfidentialityCategoryManager;
@@ -49,10 +46,7 @@ public abstract class JobseekerConfidentialityProfile
 
   public boolean resetConfidentialFlags()
   {
-    Iterator it = confidentialPhrases.entrySet().iterator();
     boolean isChanged = false;
-
-
     for (Integer key : confidentialPhrases.keySet())
     {
       isChanged = resetFlagsById(key);
@@ -63,12 +57,12 @@ public abstract class JobseekerConfidentialityProfile
   }
 
 
-  public boolean resetConfidentialFlagsByCategoryId(int id)
+  public boolean resetConfidentialFlagsByCategoryId(String name)
   {
     boolean isChanged = false;
 
-    ConfidentialityCategory confidentialityCategory = this.confidentialityCategoryManager.getConfidentialityCategoryById(
-            id);
+    ConfidentialityCategory confidentialityCategory = this.confidentialityCategoryManager.getConfidentialityCategory(
+            name);
     for (Integer confidentialityPhraseCategoryId : confidentialityCategory.getConfidentialityPhraseCategoryIds())
     {
       if (resetFlagsById(confidentialityPhraseCategoryId))
@@ -77,6 +71,26 @@ public abstract class JobseekerConfidentialityProfile
       }
     }
     return isChanged;
+  }
+
+
+  public void createNewConfidentialType(int id,
+                                        List<ConfidentialPhrase> confidentialPhrasesList)
+  {
+    confidentialPhrases.put(id, confidentialPhrasesList);
+  }
+
+
+  public void addConfidentialTypeToCategory(int typeId,
+                                            String categoryName)
+  {
+    confidentialityCategoryManager.addTypeToCategory(typeId, categoryName);
+  }
+
+
+  public void createNewCategory(String name)
+  {
+    confidentialityCategoryManager.createNewCategory(name);
   }
 
 
