@@ -14,7 +14,7 @@ public abstract class JobseekerConfidentialityProfile
   {
     this.confidentialPhrases = new ArrayList<>();
   }
-  public final boolean resetConfidentialFlags()
+  protected boolean resetFlags()
   {
     boolean isChanged = false;
     for (ConfidentialPhrase phrase : this.confidentialPhrases)
@@ -29,6 +29,7 @@ public abstract class JobseekerConfidentialityProfile
   }
 
   public abstract boolean resetContactInfoConfidentialFlags();
+  public abstract boolean resetConfidentialFlags();
 
 }
 
