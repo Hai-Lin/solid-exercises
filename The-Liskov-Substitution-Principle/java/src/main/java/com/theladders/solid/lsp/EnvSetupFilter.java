@@ -75,21 +75,7 @@ public class EnvSetupFilter
   {
     HashMap<String,String> baseEnv = EnvironmentFactory.getEnvironmentFor(hostName);
 
-    boolean sslIsSupported = Boolean.parseBoolean((String) baseEnv.get("isSSL"));
-
-    Map<String, String> keyMap;
-    if (!sslIsSupported)
-    {
-      keyMap = new HashMap<>(noSSLPropMap);
-    }
-    else if (isSecure)
-    {
-      keyMap = new HashMap<>(securePropMap);
-    }
-    else
-    {
-      keyMap = new HashMap<>(insecurePropMap);
-    }
+    Map<String, String> keyMap = getKeyMap(isSecure,baseEnv);
 
     HashMap<String, String> env = new HashMap<>();
     env.putAll(baseEnv);
@@ -108,5 +94,26 @@ public class EnvSetupFilter
     }
 
     return environment;
+  }
+
+
+  private HashMap<String, String> getKeyMap(boolean isSecure, HashMap<String, String> baseEnv)
+  {
+    boolean sslIsSupported = Boolean.parseBoolean((String) baseEnv.get("isSSL"));
+
+    HashMap<String, String> keyMap;
+    if (!sslIsSupported)
+    {
+      keyMap = new HashMap<>(noSSLPropMap);
+    }
+    else if (isSecure)
+    {
+      keyMap = new HashMap<>(securePropMap);
+    }
+    else
+    {
+      keyMap = new HashMap<>(insecurePropMap);
+    }
+    return keyMap;
   }
 }
