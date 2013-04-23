@@ -8,12 +8,12 @@ public class App
 
   public static void main(String[] args)
   {
-    EnvGenerator filter = new EnvGenerator(hostName);
+    EnvGenerator generator = new EnvGenerator(hostName);
 
     boolean isSecure = ask("Is the HTTP request secure?");
     boolean loggedInUser = ask("Is a user logged into the site?");
 
-    Environment env = filter.getEnvironment(isSecure, loggedInUser);
+    Environment env = generator.getEnvironment(isSecure, loggedInUser);
 
     System.out.println(env);
   }
