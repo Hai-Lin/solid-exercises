@@ -17,17 +17,6 @@ public class Environment
     this.envData = new EnvData(hashMap);
   }
 
-
-
-  public String getAdminEmail()
-  {
-    String user = getString("admin");
-    String domain = getString(KEY_EMAIL_DOMAIN);
-
-    return user.length() > 0 && domain.length() > 0 ? user + "@" + domain : "";
-  }
-
-
   public String get(String key)
   {
     if(key == null)
@@ -42,12 +31,13 @@ public class Environment
     this.envData.put(key, value);
   }
 
-  public String getString(String key)
+  //Legacy code
+  public String getAdminEmail()
   {
-    Object val = get(key);
-    return (val != null) ? val.toString().trim() : "";
+    String user = get("admin");
+    String domain = get(KEY_EMAIL_DOMAIN);
+
+    return user.length() > 0 && domain.length() > 0 ? user + "@" + domain : "";
   }
-
-
 
 }

@@ -12,7 +12,7 @@ import java.util.Map;
  * @author Zhi-Da Zhong &lt;zz@theladders.com&gt;
  */
 
-public class EnvSetupFilter
+public class EnvGenerator
 {
   public static final String               SECURE_HOST = "secure";
 
@@ -66,7 +66,7 @@ public class EnvSetupFilter
 
   private final String hostName;
 
-  public EnvSetupFilter(String hostName)
+  public EnvGenerator(String hostName)
   {
     this.hostName = hostName;
   }

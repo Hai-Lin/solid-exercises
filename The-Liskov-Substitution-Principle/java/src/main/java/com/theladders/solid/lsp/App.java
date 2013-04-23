@@ -8,7 +8,7 @@ public class App
 
   public static void main(String[] args)
   {
-    EnvSetupFilter filter = new EnvSetupFilter(hostName);
+    EnvGenerator filter = new EnvGenerator(hostName);
 
     boolean isSecure = ask("Is the HTTP request secure?");
     boolean loggedInUser = ask("Is a user logged into the site?");
