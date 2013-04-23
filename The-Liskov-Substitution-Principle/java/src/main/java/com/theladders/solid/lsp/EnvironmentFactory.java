@@ -2,11 +2,13 @@ package com.theladders.solid.lsp;
 
 // Just a stub. Nothing to see here.
 
+import java.util.HashMap;
+
 public class EnvironmentFactory
 {
-  public static Environment getEnvironmentFor(String hostName)
+  public static HashMap<String, String> getEnvironmentFor(String hostName)
   {
-    Environment env = new Environment();
+    HashMap<String, String> env = new HashMap<>();
 
     env.put("isSSL", "true");
     env.put("home", "http://" + hostName);

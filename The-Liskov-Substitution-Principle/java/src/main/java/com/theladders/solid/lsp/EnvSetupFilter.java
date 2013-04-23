@@ -73,7 +73,7 @@ public class EnvSetupFilter
 
   public Environment getEnvironment(boolean isSecure, boolean loggedInUser)
   {
-    Environment baseEnv = EnvironmentFactory.getEnvironmentFor(hostName);
+    HashMap<String,String> baseEnv = EnvironmentFactory.getEnvironmentFor(hostName);
 
     boolean sslIsSupported = Boolean.parseBoolean((String) baseEnv.get("isSSL"));
 
@@ -91,18 +91,22 @@ public class EnvSetupFilter
       keyMap = new HashMap<>(insecurePropMap);
     }
 
-    Environment dynamicEnv = new DynamicEnvironment(baseEnv, keyMap);
+    HashMap<String, String> env = new HashMap<>();
+    env.putAll(baseEnv);
+    env.putAll(keyMap);
 
-    new SiteConfiguration().seedEnvironment(dynamicEnv);
+    Environment environment = new Environment(env);
+
+    new SiteConfiguration().seedEnvironment(environment);
 
     // Adds /member to site URLs if the user is logged in.
     if (loggedInUser)
     {
       /* Ensure site.home is member home */
-      dynamicEnv.put("home", dynamicEnv.get("home") + SiteConfiguration.MEMBER_PATH_PREFIX);
-      dynamicEnv.put("secureHome", dynamicEnv.get("secureHome") + SiteConfiguration.MEMBER_PATH_PREFIX);
+      environment.put("home", environment.get("home") + SiteConfiguration.MEMBER_PATH_PREFIX);
+      environment.put("secureHome", environment.get("secureHome") + SiteConfiguration.MEMBER_PATH_PREFIX);
     }
 
-    return dynamicEnv;
+    return environment;
   }
 }
