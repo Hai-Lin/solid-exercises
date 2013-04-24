@@ -2,6 +2,8 @@ package com.theladders.solid.srp.ResumeController;
 
 
 import java.util.HashMap;
+
+import com.theladders.solid.srp.ResumeInfo;
 import com.theladders.solid.srp.jobseeker.Jobseeker;
 import com.theladders.solid.srp.resume.Resume;
 import com.theladders.solid.srp.resume.ResumeManager;
@@ -20,28 +22,24 @@ public class ResumeController
     this.myResumeManager = myResumeManager;
   }
 
-  public ResumeProcessResult processResume(HashMap<String, String> resumeInfo, Jobseeker jobseeker)
+  public ResumeProcessResult processResume(ResumeInfo resumeInfo, Jobseeker jobseeker)
   {
-    if(isResumeInvalid(resumeInfo))
+    if(resumeInfo.getName() == null && !resumeInfo.isExisting())
       return new ResumeProcessResult(null, ResumeProcessResultStatus.INVALID);
     Resume resume = saveNewOrRetrieveExistingResume(resumeInfo, jobseeker);
     return new ResumeProcessResult(resume, ResumeProcessResultStatus.SUCCESS);
   }
 
 
-  private boolean isResumeInvalid(HashMap<String ,String> resumeInfo)
-  {
-    return !"existing".equals(resumeInfo.get("whichResumeString")) && resumeInfo.get("resumeName") == null;
 
-  }
-  private Resume saveNewOrRetrieveExistingResume(HashMap<String, String> resumeInfo,
+  private Resume saveNewOrRetrieveExistingResume(ResumeInfo resumeInfo,
                                                  Jobseeker jobseeker)
   {
     Resume resume;
-    if (!"existing".equals(resumeInfo.get("whichResumeString")) )
+    if (!resumeInfo.isExisting())
     {
-      resume = resumeManager.saveResume(jobseeker, resumeInfo.get("resumeName"));
-      if (resume != null && "yes".equals(resumeInfo.get("makeResumeActiveString")))
+      resume = resumeManager.saveResume(jobseeker, resumeInfo.getName());
+      if (resume != null && resumeInfo.isMakedActive())
       {
         myResumeManager.saveAsActive(jobseeker, resume);
       }

@@ -9,15 +9,18 @@ public class JobApplicationInfo
 {
   private final String                  jobIdString;
   private final Jobseeker               jobSeeker;
-  private final HashMap<String, String> resumeInfo;
   private final Job                     job;
+  private final ResumeInfo              resumeInfo;
 
 
-  public JobApplicationInfo(String jobIdString, Jobseeker jobseeker, HashMap<String, String> resumeInfo, Job job)
+  public JobApplicationInfo(String jobIdString,
+                            Jobseeker jobseeker,
+                            HashMap<String, String> resumeInfo,
+                            Job job)
   {
     this.jobIdString = jobIdString;
     this.job = job;
-    this.resumeInfo = resumeInfo;
+    this.resumeInfo = new ResumeInfo(resumeInfo);
     this.jobSeeker = jobseeker;
   }
 
@@ -27,10 +30,12 @@ public class JobApplicationInfo
     return this.jobIdString;
   }
 
+
   public Job getJob()
   {
     return job;
   }
+
 
   public Jobseeker getJobSeeker()
   {
@@ -38,7 +43,7 @@ public class JobApplicationInfo
   }
 
 
-  public HashMap<String, String> getResumeInfo()
+  public ResumeInfo getResumeInfo()
   {
     return this.resumeInfo;
   }

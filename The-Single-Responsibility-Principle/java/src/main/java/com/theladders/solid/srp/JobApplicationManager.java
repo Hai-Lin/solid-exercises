@@ -53,7 +53,7 @@ public class JobApplicationManager
   {
     Job job = jobApplicationInfo.getJob();
     Jobseeker jobseeker = jobApplicationInfo.getJobSeeker();
-    HashMap<String, String> resumeInfo = jobApplicationInfo.getResumeInfo();
+    ResumeInfo resumeInfo =  jobApplicationInfo.getResumeInfo();
 
 
     ResumeProcessResult resumeProcessResult = resumeController.processResume(resumeInfo, jobseeker);
