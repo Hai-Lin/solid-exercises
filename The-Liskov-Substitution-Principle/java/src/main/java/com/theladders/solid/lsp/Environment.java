@@ -5,16 +5,16 @@ import java.util.HashMap;
 public class Environment
 {
   public static final String KEY_EMAIL_DOMAIN = "emaildomain";
-  private final EnvData envData;
+  private final HashMap<String, String> envData;
 
   public Environment()
   {
-    this.envData = new EnvData();
+    this.envData = new HashMap<>();
   }
 
   public Environment(HashMap<String, String> hashMap)
   {
-    this.envData = new EnvData(hashMap);
+    this.envData = hashMap;
   }
 
   public String get(String key)
