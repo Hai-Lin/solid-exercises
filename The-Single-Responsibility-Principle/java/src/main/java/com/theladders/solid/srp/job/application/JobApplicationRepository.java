@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.theladders.solid.srp.job.Job;
-import com.theladders.solid.srp.jobseeker.Jobseeker;
+import com.theladders.solid.srp.jobseeker.JobSeeker;
 
 public class JobApplicationRepository
 {
@@ -20,11 +20,11 @@ public class JobApplicationRepository
     applications.add(application);
   }
 
-  public boolean applicationExistsFor(Jobseeker jobseeker, Job job)
+  public boolean applicationExistsFor(JobSeeker jobSeeker, Job job)
   {
     for(SuccessfulApplication application : applications)
     {
-      if (application.getJobseeker().equals(jobseeker) &&
+      if (application.getJobSeeker().equals(jobSeeker) &&
           application.getJob().equals(job))
       {
         return true;

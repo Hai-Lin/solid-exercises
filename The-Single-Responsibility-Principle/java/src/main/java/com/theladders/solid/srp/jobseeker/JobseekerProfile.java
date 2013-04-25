@@ -1,11 +1,12 @@
 package com.theladders.solid.srp.jobseeker;
 
-public class JobseekerProfile
+public class JobSeekerProfile
 {
   private final int id;
   private final ProfileStatus status;
 
-  public JobseekerProfile(int id, ProfileStatus status)
+  public JobSeekerProfile(int id,
+                          ProfileStatus status)
   {
     this.id = id;
     this.status = status;

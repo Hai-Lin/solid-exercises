@@ -1,4 +1,4 @@
-package com.theladders.solid.srp.ResumeController;
+package com.theladders.solid.srp.resumeController;
 
 import com.theladders.solid.srp.resume.Resume;
 

@@ -1,4 +1,4 @@
-package com.theladders.solid.srp;
+package com.theladders.solid.srp.applicationInfo;
 
 
 import java.util.HashMap;
@@ -10,7 +10,6 @@ public class ResumeInfo
   private boolean isMakdeActive;
 
 
-
   public ResumeInfo(HashMap<String, String> info)
   {
     this.name = info.get("resumeName");
@@ -18,28 +17,33 @@ public class ResumeInfo
     this.isMakdeActive = validString(info.get("makeResumeActiveString")).equals("yes");
   }
 
+
   private String validString(String string)
   {
-    if(string == null)
+    if (string == null)
+    {
       return "";
+    }
     return string;
   }
+
 
   public boolean isExisting()
   {
     return this.isExisting;
   }
 
+
   public boolean isMakedActive()
   {
     return this.isMakdeActive;
   }
 
+
   public String getName()
   {
     return name;
   }
-
 
 
 }

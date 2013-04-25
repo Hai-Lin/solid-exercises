@@ -1,48 +1,45 @@
 package com.theladders.solid.srp;
 
 
-import java.util.HashMap;
-
-
+import com.theladders.solid.srp.applicationInfo.JobApplicationInfo;
+import com.theladders.solid.srp.applicationInfo.ResumeInfo;
 import com.theladders.solid.srp.job.Job;
 import com.theladders.solid.srp.job.application.ApplicationFailureException;
 import com.theladders.solid.srp.job.application.JobApplicationSystem;
 import com.theladders.solid.srp.job.application.UnprocessedApplication;
-import com.theladders.solid.srp.jobseeker.JobseekerProfile;
-import com.theladders.solid.srp.jobseeker.JobseekerProfileManager;
-import com.theladders.solid.srp.jobseeker.Jobseeker;
+import com.theladders.solid.srp.jobseeker.JobSeeker;
+import com.theladders.solid.srp.jobseeker.JobSeekerProfile;
+import com.theladders.solid.srp.jobseeker.JobSeekerProfileManager;
 import com.theladders.solid.srp.jobseeker.ProfileStatus;
-import com.theladders.solid.srp.resume.MyResumeManager;
 import com.theladders.solid.srp.resume.Resume;
 import com.theladders.solid.srp.resume.ResumeManager;
-import com.theladders.solid.srp.ResumeController.ResumeController;
-import com.theladders.solid.srp.ResumeController.ResumeProcessResult;
+import com.theladders.solid.srp.resumeController.ResumeController;
+import com.theladders.solid.srp.resumeController.ResumeProcessResult;
 
 
 public class JobApplicationManager
 {
 
-  private final JobseekerProfileManager jobseekerProfileManager;
+  private final JobSeekerProfileManager jobSeekerProfileManager;
   private final JobApplicationSystem    jobApplicationSystem;
   private final ResumeController        resumeController;
 
 
-  public JobApplicationManager(JobseekerProfileManager jobseekerProfileManager,
+  public JobApplicationManager(JobSeekerProfileManager jobSeekerProfileManager,
                                JobApplicationSystem jobApplicationSystem,
-                               ResumeManager resumeManager,
-                               MyResumeManager myResumeManager)
+                               ResumeManager resumeManager)
   {
-    this.jobseekerProfileManager = jobseekerProfileManager;
+    this.jobSeekerProfileManager = jobSeekerProfileManager;
     this.jobApplicationSystem = jobApplicationSystem;
-    this.resumeController = new ResumeController(resumeManager, myResumeManager);
+    this.resumeController = new ResumeController(resumeManager);
   }
 
 
-  private boolean isResumeCompleteByPremiumUser(Jobseeker jobseeker,
-                                                JobseekerProfile profile)
+  private boolean isResumeCompleteByPremiumUser(JobSeeker jobSeeker,
+                                                JobSeekerProfile profile)
   {
 
-    return !jobseeker.isPremium() && (profile.getStatus().equals(ProfileStatus.INCOMPLETE) ||
+    return !jobSeeker.isPremium() && (profile.getStatus().equals(ProfileStatus.INCOMPLETE) ||
                                       profile.getStatus().equals(ProfileStatus.NO_PROFILE) ||
                                       profile.getStatus().equals(ProfileStatus.REMOVED));
   }
@@ -52,11 +49,11 @@ public class JobApplicationManager
 
   {
     Job job = jobApplicationInfo.getJob();
-    Jobseeker jobseeker = jobApplicationInfo.getJobSeeker();
+    JobSeeker jobSeeker = jobApplicationInfo.getJobSeeker();
     ResumeInfo resumeInfo =  jobApplicationInfo.getResumeInfo();
 
 
-    ResumeProcessResult resumeProcessResult = resumeController.processResume(resumeInfo, jobseeker);
+    ResumeProcessResult resumeProcessResult = resumeController.processResume(resumeInfo, jobSeeker);
     if (!resumeProcessResult.isResumeValid())
     {
       return JobApplicationResultStatus.INVALID;
@@ -67,16 +64,16 @@ public class JobApplicationManager
     {
       return JobApplicationResultStatus.JOB_NOT_FOUND;
     }
-    JobseekerProfile profile = jobseekerProfileManager.getJobSeekerProfile(jobseeker);
+    JobSeekerProfile profile = jobSeekerProfileManager.getJobSeekerProfile(jobSeeker);
     try
     {
-      apply(jobseeker, job, resume);
+      apply(jobSeeker, job, resume);
     }
     catch (Exception e)
     {
       return JobApplicationResultStatus.INVALID;
     }
-    if (isResumeCompleteByPremiumUser(jobseeker, profile))
+    if (isResumeCompleteByPremiumUser(jobSeeker, profile))
     {
       return JobApplicationResultStatus.RESUME_NOT_COMPLETE;
     }
@@ -93,11 +90,11 @@ public class JobApplicationManager
   }
 
 
-  private void apply(Jobseeker jobseeker,
+  private void apply(JobSeeker jobSeeker,
                      Job job,
                      Resume resume)
   {
-    UnprocessedApplication application = new UnprocessedApplication(jobseeker, job, resume);
+    UnprocessedApplication application = new UnprocessedApplication(jobSeeker, job, resume);
     com.theladders.solid.srp.job.application.JobApplicationResult applicationResult = jobApplicationSystem.apply(
             application);
     handleApplicationResult(applicationResult);

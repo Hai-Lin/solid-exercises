@@ -16,13 +16,13 @@ import com.theladders.solid.srp.job.JobSearchService;
 import com.theladders.solid.srp.job.application.JobApplicationRepository;
 import com.theladders.solid.srp.job.application.JobApplicationSystem;
 import com.theladders.solid.srp.job.application.SuccessfulApplication;
-import com.theladders.solid.srp.jobseeker.JobseekerProfile;
-import com.theladders.solid.srp.jobseeker.JobseekerProfileManager;
-import com.theladders.solid.srp.jobseeker.JobseekerProfileRepository;
+import com.theladders.solid.srp.jobseeker.JobSeeker;
+import com.theladders.solid.srp.jobseeker.JobSeekerId;
+import com.theladders.solid.srp.jobseeker.JobSeekerProfile;
+import com.theladders.solid.srp.jobseeker.JobSeekerProfileManager;
+import com.theladders.solid.srp.jobseeker.JobSeekerProfileRepository;
 import com.theladders.solid.srp.jobseeker.ProfileStatus;
-import com.theladders.solid.srp.jobseeker.Jobseeker;
 import com.theladders.solid.srp.resume.ActiveResumeRepository;
-import com.theladders.solid.srp.resume.MyResumeManager;
 import com.theladders.solid.srp.resume.Resume;
 import com.theladders.solid.srp.resume.ResumeManager;
 import com.theladders.solid.srp.resume.ResumeRepository;
@@ -39,7 +39,7 @@ public class TestIt
   private JobRepository              jobRepository;
   private ResumeRepository           resumeRepository;
   private JobApplicationRepository   jobApplicationRepository;
-  private JobseekerProfileRepository jobseekerProfileRepository;
+  private JobSeekerProfileRepository jobSeekerProfileRepository;
   private ActiveResumeRepository     activeResumeRepository;
 
   private SuccessfulApplication existingApplication;
@@ -48,8 +48,8 @@ public class TestIt
   @Test
   public void requestWithValidJob()
   {
-    Jobseeker JOBSEEKER = new Jobseeker(APPROVED_JOBSEEKER, true);
-    HttpSession session = new HttpSession(JOBSEEKER);
+    JobSeeker JobSeeker = new JobSeeker(APPROVED_JOBSEEKER, true);
+    HttpSession session = new HttpSession(JobSeeker);
 
     Map<String, String> parameters = new HashMap<>();
     parameters.put("jobId", "5");
@@ -68,8 +68,8 @@ public class TestIt
   @Test
   public void requestWithValidJobByBasic()
   {
-    Jobseeker JOBSEEKER = new Jobseeker(APPROVED_JOBSEEKER, false);
-    HttpSession session = new HttpSession(JOBSEEKER);
+    JobSeeker JobSeeker = new JobSeeker(APPROVED_JOBSEEKER, false);
+    HttpSession session = new HttpSession(JobSeeker);
 
     Map<String, String> parameters = new HashMap<>();
     parameters.put("jobId", "5");
@@ -89,8 +89,8 @@ public class TestIt
   @Test
   public void applyUsingExistingResume()
   {
-    Jobseeker JOBSEEKER = new Jobseeker(JOBSEEKER_WITH_RESUME, true);
-    HttpSession session = new HttpSession(JOBSEEKER);
+    JobSeeker JobSeeker = new JobSeeker(JOBSEEKER_WITH_RESUME, true);
+    HttpSession session = new HttpSession(JobSeeker);
 
     Map<String, String> parameters = new HashMap<>();
     parameters.put("jobId","5");
@@ -110,8 +110,8 @@ public class TestIt
   @Test
   public void requestWithInvalidJob()
   {
-    Jobseeker JOBSEEKER = new Jobseeker(APPROVED_JOBSEEKER, true);
-    HttpSession session = new HttpSession(JOBSEEKER);
+    JobSeeker JobSeeker = new JobSeeker(APPROVED_JOBSEEKER, true);
+    HttpSession session = new HttpSession(JobSeeker);
 
     Map<String, String> parameters = new HashMap<>();
     parameters.put("jobId", String.valueOf(INVALID_JOB_ID));
@@ -130,8 +130,8 @@ public class TestIt
   @Test
   public void requestWithNoResume()
   {
-    Jobseeker JOBSEEKER = new Jobseeker(APPROVED_JOBSEEKER, true);
-    HttpSession session = new HttpSession(JOBSEEKER);
+    JobSeeker JobSeeker = new JobSeeker(APPROVED_JOBSEEKER, true);
+    HttpSession session = new HttpSession(JobSeeker);
 
     Map<String, String> parameters = new HashMap<>();
     parameters.put("jobId", "5");
@@ -150,8 +150,8 @@ public class TestIt
   @Test
   public void reapplyToJob()
   {
-    Jobseeker JOBSEEKER = new Jobseeker(APPROVED_JOBSEEKER, true);
-    HttpSession session = new HttpSession(JOBSEEKER);
+    JobSeeker JobSeeker = new JobSeeker(APPROVED_JOBSEEKER, true);
+    HttpSession session = new HttpSession(JobSeeker);
 
     Map<String, String> parameters = new HashMap<>();
     parameters.put("jobId","15");
@@ -169,8 +169,8 @@ public class TestIt
   @Test
   public void unapprovedBasic()
   {
-    Jobseeker JOBSEEKER = new Jobseeker(INCOMPLETE_JOBSEEKER, false);
-    HttpSession session = new HttpSession(JOBSEEKER);
+    JobSeeker JobSeeker = new JobSeeker(INCOMPLETE_JOBSEEKER, false);
+    HttpSession session = new HttpSession(JobSeeker);
 
     Map<String, String> parameters = new HashMap<>();
     parameters.put("jobId","5");
@@ -189,8 +189,8 @@ public class TestIt
   @Test
   public void resumeIsSaved()
   {
-    Jobseeker JOBSEEKER = new Jobseeker(APPROVED_JOBSEEKER, true);
-    HttpSession session = new HttpSession(JOBSEEKER);
+    JobSeeker JobSeeker = new JobSeeker(APPROVED_JOBSEEKER, true);
+    HttpSession session = new HttpSession(JobSeeker);
 
     Map<String, String> parameters = new HashMap<>();
     parameters.put("jobId","5");
@@ -209,8 +209,8 @@ public class TestIt
   @Test
   public void resumeIsMadeActive()
   {
-    Jobseeker JOBSEEKER = new Jobseeker(APPROVED_JOBSEEKER, true);
-    HttpSession session = new HttpSession(JOBSEEKER);
+    JobSeeker jobSeeker = new JobSeeker(APPROVED_JOBSEEKER, true);
+    HttpSession session = new HttpSession(jobSeeker);
 
     Map<String, String> parameters = new HashMap<>();
     parameters.put("jobId","5");
@@ -224,7 +224,7 @@ public class TestIt
 
     controller.handle(request, response);
 
-    assertEquals(new Resume("Save Me Seymour"), activeResumeRepository.activeResumeFor(APPROVED_JOBSEEKER));
+    assertEquals(new Resume("Save Me Seymour"), activeResumeRepository.activeResumeFor(jobSeeker.getId()));
   }
 
   @Before
@@ -240,7 +240,7 @@ public class TestIt
 
   private void setupJobseekerProfileRepository()
   {
-    jobseekerProfileRepository = new JobseekerProfileRepository();
+    jobSeekerProfileRepository = new JobSeekerProfileRepository();
 
     addToJobseekerProfileRepository(APPROVED_JOBSEEKER, ProfileStatus.APPROVED);
     addToJobseekerProfileRepository(INCOMPLETE_JOBSEEKER, ProfileStatus.INCOMPLETE);
@@ -249,8 +249,8 @@ public class TestIt
 
   private void addToJobseekerProfileRepository(int id, ProfileStatus status)
   {
-    JobseekerProfile profile = new JobseekerProfile(id, status);
-    jobseekerProfileRepository.addProfile(profile);
+    JobSeekerProfile profile = new JobSeekerProfile(id, status);
+    jobSeekerProfileRepository.addProfile(profile);
   }
 
   private void setupJobRepository()
@@ -284,7 +284,9 @@ public class TestIt
   {
     activeResumeRepository = new ActiveResumeRepository();
 
-    activeResumeRepository.makeActive(JOBSEEKER_WITH_RESUME, new Resume("Blammo"));
+    JobSeekerId jobSeekerId = new JobSeekerId(JOBSEEKER_WITH_RESUME);
+
+    activeResumeRepository.makeActive(jobSeekerId, new Resume("Blammo"));
   }
 
   private void setupJobApplicationRepository()
@@ -296,27 +298,25 @@ public class TestIt
 
   private void addToJobApplicationRepository()
   {
-    Jobseeker JOBSEEKER = new Jobseeker(APPROVED_JOBSEEKER, true);
+    JobSeeker JobSeeker = new JobSeeker(APPROVED_JOBSEEKER, true);
     Job job = new Job(15);
     Resume resume = new Resume("foo");
 
-    existingApplication = new SuccessfulApplication(JOBSEEKER, job, resume);
+    existingApplication = new SuccessfulApplication(JobSeeker, job, resume);
 
     jobApplicationRepository.add(existingApplication);
   }
 
   private void setupController()
   {
-    JobseekerProfileManager jobseekerProfileManager = new JobseekerProfileManager(jobseekerProfileRepository);
+    JobSeekerProfileManager jobSeekerProfileManager = new JobSeekerProfileManager(jobSeekerProfileRepository);
     JobSearchService jobSearchService = new JobSearchService(jobRepository);
     JobApplicationSystem jobApplicationSystem = new JobApplicationSystem(jobApplicationRepository);
-    ResumeManager resumeManager = new ResumeManager(resumeRepository);
-    MyResumeManager myResumeManager = new MyResumeManager(activeResumeRepository);
+    ResumeManager resumeManager = new ResumeManager(resumeRepository, activeResumeRepository);
 
-    controller = new JobApplicationController(jobseekerProfileManager,
+    controller = new JobApplicationController(jobSeekerProfileManager,
                                      jobSearchService,
                                      jobApplicationSystem,
-                                     resumeManager,
-                                     myResumeManager);
+                                     resumeManager);
   }
 }

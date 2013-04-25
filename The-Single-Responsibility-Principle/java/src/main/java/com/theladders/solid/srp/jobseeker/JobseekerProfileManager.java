@@ -1,17 +1,18 @@
 package com.theladders.solid.srp.jobseeker;
 
 
-public class JobseekerProfileManager
+public class JobSeekerProfileManager
 {
-  private final JobseekerProfileRepository repository;
+  private final JobSeekerProfileRepository repository;
 
-  public JobseekerProfileManager(JobseekerProfileRepository repository)
+
+  public JobSeekerProfileManager(JobSeekerProfileRepository repository)
   {
     this.repository = repository;
   }
 
-  public JobseekerProfile getJobSeekerProfile(Jobseeker jobseeker)
+  public JobSeekerProfile getJobSeekerProfile(JobSeeker jobSeeker)
   {
-    return  repository.getProfile(jobseeker.getId());
+    return  repository.getProfile(jobSeeker.getId());
   }
 }

@@ -1,12 +1,12 @@
 package com.theladders.solid.srp;
 
 
+import com.theladders.solid.srp.applicationInfo.JobApplicationInfo;
 import com.theladders.solid.srp.http.HttpRequest;
 import com.theladders.solid.srp.http.HttpResponse;
 import com.theladders.solid.srp.job.JobSearchService;
 import com.theladders.solid.srp.job.application.JobApplicationSystem;
-import com.theladders.solid.srp.jobseeker.JobseekerProfileManager;
-import com.theladders.solid.srp.resume.MyResumeManager;
+import com.theladders.solid.srp.jobseeker.JobSeekerProfileManager;
 import com.theladders.solid.srp.resume.ResumeManager;
 import com.theladders.solid.srp.view.JobApplicationResultView;
 import com.theladders.solid.srp.view.JobApplicationResultViewGenerator;
@@ -18,17 +18,15 @@ public class JobApplicationController
   private final JobApplicationManager             jobApplicationManager;
 
 
-  public JobApplicationController(JobseekerProfileManager jobseekerProfileManager,
+  public JobApplicationController(JobSeekerProfileManager jobSeekerProfileManager,
                                   JobSearchService jobSearchService,
                                   JobApplicationSystem jobApplicationSystem,
-                                  ResumeManager resumeManager,
-                                  MyResumeManager myResumeManager)
+                                  ResumeManager resumeManager)
   {
 
-    this.jobApplicationManager = new JobApplicationManager(jobseekerProfileManager,
+    this.jobApplicationManager = new JobApplicationManager(jobSeekerProfileManager,
                                                            jobApplicationSystem,
-                                                           resumeManager,
-                                                           myResumeManager);
+                                                           resumeManager);
     this.jobApplicationResultViewGenerator = new JobApplicationResultViewGenerator();
     this.jobApplicationRequestProcessor = new JobApplicationRequestProcessor(jobSearchService);
   }

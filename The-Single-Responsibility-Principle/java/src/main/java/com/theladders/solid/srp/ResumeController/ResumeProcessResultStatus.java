@@ -1,4 +1,4 @@
-package com.theladders.solid.srp.ResumeController;
+package com.theladders.solid.srp.resumeController;
 
 
 public enum ResumeProcessResultStatus

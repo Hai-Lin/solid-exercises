@@ -1,18 +1,20 @@
 package com.theladders.solid.srp.http;
 
-import com.theladders.solid.srp.jobseeker.Jobseeker;
+import com.theladders.solid.srp.jobseeker.JobSeeker;
 
 public class HttpSession
 {
-  private final Jobseeker jobseeker;
+  private final JobSeeker jobSeeker;
 
-  public HttpSession(Jobseeker jobseeker)
+
+  public HttpSession(JobSeeker jobSeeker)
   {
-    this.jobseeker = jobseeker;
+    this.jobSeeker = jobSeeker;
   }
 
-  public Jobseeker getJobseeker()
+
+  public JobSeeker getJobSeeker()
   {
-    return jobseeker;
+    return jobSeeker;
   }
 }

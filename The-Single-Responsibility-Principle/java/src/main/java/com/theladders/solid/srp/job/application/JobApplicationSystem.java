@@ -13,10 +13,10 @@ public class  JobApplicationSystem
   public JobApplicationResult apply(UnprocessedApplication application)
   {
     if (application.isValid() &&
-        !repository.applicationExistsFor(application.getJobseeker(), application.getJob()))
+        !repository.applicationExistsFor(application.getJobSeeker(), application.getJob()))
     {
 
-      SuccessfulApplication success = new SuccessfulApplication(application.getJobseeker(),
+      SuccessfulApplication success = new SuccessfulApplication(application.getJobSeeker(),
                                                                 application.getJob(),
                                                                 application.getResume());
 

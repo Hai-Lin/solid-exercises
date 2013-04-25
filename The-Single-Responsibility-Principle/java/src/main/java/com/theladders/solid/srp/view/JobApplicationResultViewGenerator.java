@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
-import com.theladders.solid.srp.JobApplicationInfo;
+import com.theladders.solid.srp.applicationInfo.JobApplicationInfo;
 import com.theladders.solid.srp.JobApplicationResultStatus;
 
 public class JobApplicationResultViewGenerator

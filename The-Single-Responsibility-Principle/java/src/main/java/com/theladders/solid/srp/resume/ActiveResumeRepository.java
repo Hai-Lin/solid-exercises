@@ -3,6 +3,8 @@ package com.theladders.solid.srp.resume;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.theladders.solid.srp.jobseeker.JobSeekerId;
+
 
 public class ActiveResumeRepository
 {
@@ -13,13 +15,13 @@ public class ActiveResumeRepository
     this.resumes = new HashMap<>();
   }
 
-  public Resume activeResumeFor(int jobseekerId)
+  public Resume activeResumeFor(JobSeekerId jobSeekerId)
   {
-    return resumes.get(jobseekerId);
+    return resumes.get(jobSeekerId.getInt());
   }
 
-  public void makeActive(int jobseekerId, Resume resume)
+  public void makeActive(JobSeekerId jobSeekerId, Resume resume)
   {
-    resumes.put(jobseekerId, resume);
+    resumes.put(jobSeekerId.getInt(), resume);
   }
 }

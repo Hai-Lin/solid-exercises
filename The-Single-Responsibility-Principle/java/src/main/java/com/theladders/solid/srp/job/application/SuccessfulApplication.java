@@ -1,23 +1,25 @@
 package com.theladders.solid.srp.job.application;
 
 import com.theladders.solid.srp.job.Job;
-import com.theladders.solid.srp.jobseeker.Jobseeker;
+import com.theladders.solid.srp.jobseeker.JobSeeker;
 import com.theladders.solid.srp.resume.Resume;
 
 public class SuccessfulApplication implements JobApplicationResult
 {
-  private final Jobseeker jobseeker;
-  private final Job job;
-  private final Resume resume;
+  private final JobSeeker jobSeeker;
+  private final Job       job;
+  private final Resume    resume;
 
-  public SuccessfulApplication(Jobseeker jobseeker,
+
+  public SuccessfulApplication(JobSeeker jobSeeker,
                                Job job,
                                Resume resume)
   {
-    this.jobseeker = jobseeker;
+    this.jobSeeker = jobSeeker;
     this.job = job;
     this.resume = resume;
   }
+
 
   @Override
   public boolean failure()
@@ -25,9 +27,10 @@ public class SuccessfulApplication implements JobApplicationResult
     return false;
   }
 
-  public Object getJobseeker()
+
+  public Object getJobSeeker()
   {
-    return jobseeker;
+    return jobSeeker;
   }
 
   public Object getJob()
