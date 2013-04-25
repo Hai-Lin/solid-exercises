@@ -27,6 +27,8 @@ public class JobApplicationRepository
       if (application.getJobSeeker().equals(jobSeeker) &&
           application.getJob().equals(job))
       {
+        System.out.println("ApplicationExistsCheck");
+
         return true;
       }
     }

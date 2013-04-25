@@ -31,24 +31,33 @@ public class ResumeController
   }
 
 
+
   private Resume saveNewOrRetrieveExistingResume(ResumeInfo resumeInfo,
                                                  JobSeeker jobSeeker)
   {
     Resume resume;
     if (!resumeInfo.isExisting())
     {
-      resume = new Resume(resumeInfo);
-      resumeManager.saveResume(jobSeeker.getId(), resume);
-      if (resumeInfo.isMakedActive())
-      {
-        resumeManager.saveAsActive(jobSeeker.getId(), resume);
-      }
+      resume = saveResume(jobSeeker, resumeInfo);
     }
     else
     {
       resume = resumeManager.getActiveResume(jobSeeker.getId());
     }
 
+    return resume;
+  }
+
+
+  private Resume saveResume(JobSeeker jobSeeker,
+                          ResumeInfo resumeInfo)
+  {
+    Resume resume = new Resume(resumeInfo);
+    resumeManager.saveResume(jobSeeker.getId(), resume);
+    if (resumeInfo.isMakedActive())
+    {
+      resumeManager.saveAsActive(jobSeeker.getId(), resume);
+    }
     return resume;
   }
 }

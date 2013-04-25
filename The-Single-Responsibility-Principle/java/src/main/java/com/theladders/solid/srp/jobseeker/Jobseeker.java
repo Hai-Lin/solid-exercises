@@ -52,6 +52,6 @@ public class JobSeeker
       return false;
     }
     JobSeeker other = (JobSeeker) obj;
-    return id == other.id;
+    return id.equals(other.getId());
   }
 }
