@@ -1,52 +1,52 @@
-package com.theladders.solid.srp.ResumeController;
+package com.theladders.solid.srp.resumeController;
 
 
-import java.util.HashMap;
-
-import com.theladders.solid.srp.ResumeInfo;
-import com.theladders.solid.srp.jobseeker.Jobseeker;
+import com.theladders.solid.srp.applicationInfo.ResumeInfo;
+import com.theladders.solid.srp.jobseeker.JobSeeker;
 import com.theladders.solid.srp.resume.Resume;
 import com.theladders.solid.srp.resume.ResumeManager;
-import com.theladders.solid.srp.resume.MyResumeManager;
 
 
 public class ResumeController
 {
 
-  private ResumeManager resumeManager;
-  private MyResumeManager myResumeManager;
+  private ResumeManager   resumeManager;
 
-  public ResumeController(ResumeManager resumeManager, MyResumeManager myResumeManager)
+
+  public ResumeController(ResumeManager resumeManager)
   {
     this.resumeManager = resumeManager;
-    this.myResumeManager = myResumeManager;
   }
 
-  public ResumeProcessResult processResume(ResumeInfo resumeInfo, Jobseeker jobseeker)
+
+  public ResumeProcessResult processResume(ResumeInfo resumeInfo,
+                                           JobSeeker jobSeeker)
   {
-    if(resumeInfo.getName() == null && !resumeInfo.isExisting())
+    if (resumeInfo.getName() == null && !resumeInfo.isExisting())
+    {
       return new ResumeProcessResult(null, ResumeProcessResultStatus.INVALID);
-    Resume resume = saveNewOrRetrieveExistingResume(resumeInfo, jobseeker);
+    }
+    Resume resume = saveNewOrRetrieveExistingResume(resumeInfo, jobSeeker);
     return new ResumeProcessResult(resume, ResumeProcessResultStatus.SUCCESS);
   }
 
 
-
   private Resume saveNewOrRetrieveExistingResume(ResumeInfo resumeInfo,
-                                                 Jobseeker jobseeker)
+                                                 JobSeeker jobSeeker)
   {
     Resume resume;
     if (!resumeInfo.isExisting())
     {
-      resume = resumeManager.saveResume(jobseeker, resumeInfo.getName());
-      if (resume != null && resumeInfo.isMakedActive())
+      resume = new Resume(resumeInfo);
+      resumeManager.saveResume(jobSeeker.getId(), resume);
+      if (resumeInfo.isMakedActive())
       {
-        myResumeManager.saveAsActive(jobseeker, resume);
+        resumeManager.saveAsActive(jobSeeker.getId(), resume);
       }
     }
     else
     {
-      resume = myResumeManager.getActiveResume(jobseeker.getId());
+      resume = resumeManager.getActiveResume(jobSeeker.getId());
     }
 
     return resume;
