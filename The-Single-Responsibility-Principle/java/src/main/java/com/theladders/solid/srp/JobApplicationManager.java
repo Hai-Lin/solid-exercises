@@ -22,16 +22,13 @@ public class JobApplicationManager
 
   private final JobSeekerProfileManager jobSeekerProfileManager;
   private final JobApplicationSystem    jobApplicationSystem;
-  private final ResumeController        resumeController;
 
 
   public JobApplicationManager(JobSeekerProfileManager jobSeekerProfileManager,
-                               JobApplicationSystem jobApplicationSystem,
-                               ResumeManager resumeManager)
+                               JobApplicationSystem jobApplicationSystem)
   {
     this.jobSeekerProfileManager = jobSeekerProfileManager;
     this.jobApplicationSystem = jobApplicationSystem;
-    this.resumeController = new ResumeController(resumeManager);
   }
 
 
@@ -50,15 +47,13 @@ public class JobApplicationManager
   {
     Job job = jobApplicationInfo.getJob();
     JobSeeker jobSeeker = jobApplicationInfo.getJobSeeker();
-    ResumeInfo resumeInfo =  jobApplicationInfo.getResumeInfo();
+    Resume resume = jobApplicationInfo.getResume();
 
 
-    ResumeProcessResult resumeProcessResult = resumeController.processResume(resumeInfo, jobSeeker);
-    if (!resumeProcessResult.isResumeValid())
+    if (resume == null)
     {
       return JobApplicationResultStatus.INVALID;
     }
-    Resume resume = resumeProcessResult.getResume();
 
     if (job == null)
     {

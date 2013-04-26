@@ -2,6 +2,7 @@ package com.theladders.solid.srp;
 
 
 import com.theladders.solid.srp.applicationInfo.JobApplicationInfo;
+import com.theladders.solid.srp.applicationInfo.JobApplicationInfoGenerator;
 import com.theladders.solid.srp.http.HttpRequest;
 import com.theladders.solid.srp.http.HttpResponse;
 import com.theladders.solid.srp.job.JobSearchService;
@@ -14,7 +15,7 @@ import com.theladders.solid.srp.view.JobApplicationResultViewGenerator;
 public class JobApplicationController
 {
   private final JobApplicationResultViewGenerator jobApplicationResultViewGenerator;
-  private final JobApplicationRequestProcessor    jobApplicationRequestProcessor;
+  private final JobApplicationInfoGenerator       jobApplicationInfoGenerator;
   private final JobApplicationManager             jobApplicationManager;
 
 
@@ -25,17 +26,16 @@ public class JobApplicationController
   {
 
     this.jobApplicationManager = new JobApplicationManager(jobSeekerProfileManager,
-                                                           jobApplicationSystem,
-                                                           resumeManager);
+                                                           jobApplicationSystem);
     this.jobApplicationResultViewGenerator = new JobApplicationResultViewGenerator();
-    this.jobApplicationRequestProcessor = new JobApplicationRequestProcessor(jobSearchService);
+    this.jobApplicationInfoGenerator = new JobApplicationInfoGenerator(jobSearchService,resumeManager);
   }
 
 
   public HttpResponse handle(HttpRequest request,
                              HttpResponse response)
   {
-    JobApplicationInfo jobApplicationInfo = jobApplicationRequestProcessor.processJobApplicationRequest(request);
+    JobApplicationInfo jobApplicationInfo = jobApplicationInfoGenerator.processJobApplicationRequest(request);
     JobApplicationResultStatus resultStatus = jobApplicationManager.processJobApplication(jobApplicationInfo);
     JobApplicationResultView jobApplicationResultView = jobApplicationResultViewGenerator.generateJobApplicationResultView(jobApplicationInfo,resultStatus);
     response.setJobApplicationResultView(jobApplicationResultView);
