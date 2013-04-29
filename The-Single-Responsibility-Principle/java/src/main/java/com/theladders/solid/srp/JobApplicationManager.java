@@ -10,6 +10,12 @@ import com.theladders.solid.srp.jobseeker.JobSeeker;
 import com.theladders.solid.srp.jobseeker.JobSeekerProfile;
 import com.theladders.solid.srp.jobseeker.JobSeekerProfileManager;
 import com.theladders.solid.srp.jobseeker.ProfileStatus;
+import com.theladders.solid.srp.result.FailedApplicationResult;
+import com.theladders.solid.srp.result.InvalidJob;
+import com.theladders.solid.srp.result.InvalidResume;
+import com.theladders.solid.srp.result.Result;
+import com.theladders.solid.srp.result.SuccessButProfileIncomplete;
+import com.theladders.solid.srp.result.SuccessfulApplicationResult;
 import com.theladders.solid.srp.resume.Resume;
 
 
@@ -39,7 +45,7 @@ public class JobApplicationManager
   }
 
 
-  public JobApplicationResultStatus processJobApplication(JobApplicationInfo jobApplicationInfo)
+  public Result processJobApplication(JobApplicationInfo jobApplicationInfo)
 
   {
     Job job = jobApplicationInfo.getJob();
@@ -49,12 +55,13 @@ public class JobApplicationManager
 
     if (resume == null)
     {
-      return JobApplicationResultStatus.INVALID;
+      return new InvalidResume(jobApplicationInfo);
+
     }
 
     if (job == null)
     {
-      return JobApplicationResultStatus.JOB_NOT_FOUND;
+      return new InvalidJob(jobApplicationInfo);
     }
     try
     {
@@ -62,13 +69,13 @@ public class JobApplicationManager
     }
     catch (Exception e)
     {
-      return JobApplicationResultStatus.INVALID;
+      return new FailedApplicationResult(jobApplicationInfo);
     }
     if (isResumeCompleteByPremiumUser(jobSeeker))
     {
-      return JobApplicationResultStatus.RESUME_NOT_COMPLETE;
+      return new SuccessButProfileIncomplete(jobApplicationInfo);
     }
-    return JobApplicationResultStatus.SUCCESS;
+    return new SuccessfulApplicationResult(jobApplicationInfo);
   }
 
 

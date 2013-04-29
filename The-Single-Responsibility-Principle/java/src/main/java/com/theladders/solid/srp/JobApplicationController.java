@@ -8,6 +8,7 @@ import com.theladders.solid.srp.http.HttpResponse;
 import com.theladders.solid.srp.job.JobSearchService;
 import com.theladders.solid.srp.job.application.JobApplicationSystem;
 import com.theladders.solid.srp.jobseeker.JobSeekerProfileManager;
+import com.theladders.solid.srp.result.Result;
 import com.theladders.solid.srp.resume.ResumeManager;
 import com.theladders.solid.srp.view.JobApplicationResultView;
 import com.theladders.solid.srp.view.JobApplicationResultViewFactory;
@@ -36,10 +37,8 @@ public class JobApplicationController
                              HttpResponse response)
   {
     JobApplicationInfo jobApplicationInfo = jobApplicationInfoGenerator.processJobApplicationRequest(request);
-    JobApplicationResultStatus resultStatus = jobApplicationManager.processJobApplication(jobApplicationInfo);
-    JobApplicationResultView jobApplicationResultView = jobApplicationResultViewFactory.render(jobApplicationInfo,
-                                                                                              resultStatus);
-    response.setJobApplicationResultView(jobApplicationResultView);
+    Result result = jobApplicationManager.processJobApplication(jobApplicationInfo);
+    result.render(response,jobApplicationResultViewFactory);
     return response;
   }
 
