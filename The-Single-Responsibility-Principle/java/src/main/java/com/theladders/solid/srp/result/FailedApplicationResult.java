@@ -25,5 +25,6 @@ public class FailedApplicationResult implements Result
   @Override public void render(HttpResponse response,
                                JobApplicationResultViewFactory render)
   {
+    render.renderFailedView(response);
   }
 }

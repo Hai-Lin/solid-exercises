@@ -22,5 +22,6 @@ public class InvalidResume   implements Result
   @Override public void render(HttpResponse response,
                                JobApplicationResultViewFactory render)
   {
+    render.renderInvalidResumeView(response);
   }
 }

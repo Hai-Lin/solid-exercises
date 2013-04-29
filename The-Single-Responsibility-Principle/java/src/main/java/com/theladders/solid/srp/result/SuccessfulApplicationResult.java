@@ -25,5 +25,6 @@ public class SuccessfulApplicationResult implements Result
   @Override public void render(HttpResponse response,
                                JobApplicationResultViewFactory render)
   {
+    render.renderSuccessfulView(response);
   }
 }

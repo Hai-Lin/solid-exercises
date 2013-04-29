@@ -25,5 +25,6 @@ public class SuccessButProfileIncomplete implements Result
   @Override public void render(HttpResponse response,
                                JobApplicationResultViewFactory render)
   {
+    render.renderSuccessButProfileIncompleteView(response);
   }
 }

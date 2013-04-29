@@ -5,34 +5,54 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
-import com.theladders.solid.srp.applicationInfo.JobApplicationInfo;
-import com.theladders.solid.srp.JobApplicationResultStatus;
+import com.theladders.solid.srp.http.HttpResponse;
 
-public class JobApplicationResultViewFactory
+public class JobApplicationResultViewFactory implements Renderer
 {
 
-  public JobApplicationResultView render(JobApplicationInfo jobApplicationInfo,
-                                         JobApplicationResultStatus jobApplicationResultStatus)
+
+  @Override public void renderFailedView(HttpResponse response)
   {
     Map<String, Object> model = new HashMap<>();
     List<String> errList = new ArrayList<>();
-    if (jobApplicationResultStatus == JobApplicationResultStatus.JOB_NOT_FOUND)
-    {
-      model.put("jobId", Integer.parseInt(jobApplicationInfo.getJobId()));
-      return new JobApplicationResultView("invalidJob", model);
-    }
+    errList.add("We could not process your application.");
+    JobApplicationResultView resultView = new JobApplicationResultView("error", model, errList);
+    response.setJobApplicationResultView(resultView);
+  }
 
-    if (jobApplicationResultStatus == JobApplicationResultStatus.SUCCESS)
-    {
-      return new JobApplicationResultView("success", model);
-    }
-    if (jobApplicationResultStatus == JobApplicationResultStatus.INVALID)
-    {
-      errList.add("We could not process your application.");
-      return new JobApplicationResultView("error", model, errList);
-    }
 
-    return new JobApplicationResultView("completeResumePlease", model);
+  @Override public void renderInvalidJobView(HttpResponse response,
+                                             String jobId)
+  {
+    Map<String, Object> model = new HashMap<>();
+    model.put("jobId", jobId);
+    JobApplicationResultView resultView = new JobApplicationResultView("invalidJob", model);
+    response.setJobApplicationResultView(resultView);
+  }
 
+
+  @Override public void renderInvalidResumeView(HttpResponse response)
+  {
+    Map<String, Object> model = new HashMap<>();
+    List<String> errList = new ArrayList<>();
+    errList.add("We could not process your application.");
+    JobApplicationResultView resultView = new JobApplicationResultView("error", model, errList);
+    response.setJobApplicationResultView(resultView);
+  }
+
+
+  @Override public void renderSuccessfulView(HttpResponse response)
+  {
+    Map<String, Object> model = new HashMap<>();
+    JobApplicationResultView resultView = new JobApplicationResultView("success", model);
+    response.setJobApplicationResultView(resultView);
+  }
+
+
+  @Override public void renderSuccessButProfileIncompleteView(HttpResponse response)
+  {
+    Map<String, Object> model = new HashMap<>();
+    JobApplicationResultView resultView = new JobApplicationResultView("completeResumePlease", model);
+    response.setJobApplicationResultView(resultView);
   }
 }

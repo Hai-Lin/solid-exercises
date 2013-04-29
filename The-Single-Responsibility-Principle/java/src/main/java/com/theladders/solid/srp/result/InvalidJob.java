@@ -24,5 +24,7 @@ public class InvalidJob  implements Result
   @Override public void render(HttpResponse response, JobApplicationResultViewFactory render)
   {
 
+    String jobId = jobApplicationInfo.getJobId();
+    render.renderInvalidJobView(response, jobId);
   }
 }
