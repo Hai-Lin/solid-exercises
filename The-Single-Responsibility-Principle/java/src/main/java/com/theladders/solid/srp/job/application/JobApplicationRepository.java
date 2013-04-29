@@ -10,29 +10,31 @@ public class JobApplicationRepository
 {
   private final List<SuccessfulApplication> applications;
 
+
   public JobApplicationRepository()
   {
     this.applications = new ArrayList<>();
   }
+
 
   public void add(SuccessfulApplication application)
   {
     applications.add(application);
   }
 
-  public boolean applicationExistsFor(JobSeeker jobSeeker, Job job)
+
+  public boolean applicationExistsFor(JobSeeker jobSeeker,
+                                      Job job)
   {
-    for(SuccessfulApplication application : applications)
+    for (SuccessfulApplication application : applications)
     {
       if (application.getJobSeeker().equals(jobSeeker) &&
           application.getJob().equals(job))
       {
         System.out.println("ApplicationExistsCheck");
-
         return true;
       }
     }
-
     return false;
   }
 }

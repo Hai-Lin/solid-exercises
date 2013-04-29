@@ -1,4 +1,4 @@
-package com.theladders.solid.srp.resumeController;
+package com.theladders.solid.srp;
 
 
 import com.theladders.solid.srp.applicationInfo.ResumeInfo;
@@ -10,7 +10,7 @@ import com.theladders.solid.srp.resume.ResumeManager;
 public class ResumeController
 {
 
-  private ResumeManager   resumeManager;
+  private ResumeManager resumeManager;
 
 
   public ResumeController(ResumeManager resumeManager)
@@ -19,17 +19,15 @@ public class ResumeController
   }
 
 
-  public ResumeProcessResult processResume(ResumeInfo resumeInfo,
-                                           JobSeeker jobSeeker)
+  public Resume processResume(ResumeInfo resumeInfo,
+                              JobSeeker jobSeeker)
   {
     if (resumeInfo.getName() == null && !resumeInfo.isExisting())
     {
-      return new ResumeProcessResult(null, ResumeProcessResultStatus.INVALID);
+      return null;
     }
-    Resume resume = saveNewOrRetrieveExistingResume(resumeInfo, jobSeeker);
-    return new ResumeProcessResult(resume, ResumeProcessResultStatus.SUCCESS);
+    return saveNewOrRetrieveExistingResume(resumeInfo, jobSeeker);
   }
-
 
 
   private Resume saveNewOrRetrieveExistingResume(ResumeInfo resumeInfo,
@@ -50,7 +48,7 @@ public class ResumeController
 
 
   private Resume saveResume(JobSeeker jobSeeker,
-                          ResumeInfo resumeInfo)
+                            ResumeInfo resumeInfo)
   {
     Resume resume = new Resume(resumeInfo);
     resumeManager.saveResume(jobSeeker.getId(), resume);

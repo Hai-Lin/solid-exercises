@@ -2,7 +2,6 @@ package com.theladders.solid.srp;
 
 
 import com.theladders.solid.srp.applicationInfo.JobApplicationInfo;
-import com.theladders.solid.srp.applicationInfo.ResumeInfo;
 import com.theladders.solid.srp.job.Job;
 import com.theladders.solid.srp.job.application.ApplicationFailureException;
 import com.theladders.solid.srp.job.application.JobApplicationSystem;
@@ -12,9 +11,6 @@ import com.theladders.solid.srp.jobseeker.JobSeekerProfile;
 import com.theladders.solid.srp.jobseeker.JobSeekerProfileManager;
 import com.theladders.solid.srp.jobseeker.ProfileStatus;
 import com.theladders.solid.srp.resume.Resume;
-import com.theladders.solid.srp.resume.ResumeManager;
-import com.theladders.solid.srp.resumeController.ResumeController;
-import com.theladders.solid.srp.resumeController.ResumeProcessResult;
 
 
 public class JobApplicationManager
@@ -32,9 +28,10 @@ public class JobApplicationManager
   }
 
 
-  private boolean isResumeCompleteByPremiumUser(JobSeeker jobSeeker,
-                                                JobSeekerProfile profile)
+  private boolean isResumeCompleteByPremiumUser(JobSeeker jobSeeker)
   {
+    JobSeekerProfile profile = jobSeekerProfileManager.getJobSeekerProfile(jobSeeker);
+
 
     return !jobSeeker.isPremium() && (profile.getStatus().equals(ProfileStatus.INCOMPLETE) ||
                                       profile.getStatus().equals(ProfileStatus.NO_PROFILE) ||
@@ -59,7 +56,6 @@ public class JobApplicationManager
     {
       return JobApplicationResultStatus.JOB_NOT_FOUND;
     }
-    JobSeekerProfile profile = jobSeekerProfileManager.getJobSeekerProfile(jobSeeker);
     try
     {
       apply(jobSeeker, job, resume);
@@ -68,7 +64,7 @@ public class JobApplicationManager
     {
       return JobApplicationResultStatus.INVALID;
     }
-    if (isResumeCompleteByPremiumUser(jobSeeker, profile))
+    if (isResumeCompleteByPremiumUser(jobSeeker))
     {
       return JobApplicationResultStatus.RESUME_NOT_COMPLETE;
     }

@@ -4,24 +4,25 @@ import java.util.HashMap;
 
 import com.theladders.solid.srp.jobseeker.JobSeeker;
 import com.theladders.solid.srp.job.Job;
+import com.theladders.solid.srp.resume.Resume;
 
 public class JobApplicationInfo
 {
-  private final String     jobIdString;
-  private final JobSeeker  jobSeeker;
-  private final Job        job;
-  private final ResumeInfo resumeInfo;
+  private final String    jobIdString;
+  private final JobSeeker jobSeeker;
+  private final Job       job;
+  private final Resume    resume;
 
 
   public JobApplicationInfo(String jobIdString,
                             JobSeeker jobSeeker,
-                            HashMap<String, String> resumeInfo,
+                            Resume resume,
                             Job job)
   {
     this.jobIdString = jobIdString;
     this.job = job;
-    this.resumeInfo = new ResumeInfo(resumeInfo);
     this.jobSeeker = jobSeeker;
+    this.resume = resume;
   }
 
 
@@ -43,8 +44,8 @@ public class JobApplicationInfo
   }
 
 
-  public ResumeInfo getResumeInfo()
+  public Resume getResume()
   {
-    return this.resumeInfo;
+    return this.resume;
   }
 }
