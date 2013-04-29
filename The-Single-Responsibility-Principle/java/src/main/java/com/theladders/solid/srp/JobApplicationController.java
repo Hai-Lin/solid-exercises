@@ -10,13 +10,13 @@ import com.theladders.solid.srp.job.application.JobApplicationSystem;
 import com.theladders.solid.srp.jobseeker.JobSeekerProfileManager;
 import com.theladders.solid.srp.resume.ResumeManager;
 import com.theladders.solid.srp.view.JobApplicationResultView;
-import com.theladders.solid.srp.view.JobApplicationResultViewGenerator;
+import com.theladders.solid.srp.view.JobApplicationResultViewFactory;
 
 public class JobApplicationController
 {
-  private final JobApplicationResultViewGenerator jobApplicationResultViewGenerator;
-  private final JobApplicationInfoGenerator       jobApplicationInfoGenerator;
-  private final JobApplicationManager             jobApplicationManager;
+  private final JobApplicationResultViewFactory jobApplicationResultViewFactory;
+  private final JobApplicationInfoGenerator     jobApplicationInfoGenerator;
+  private final JobApplicationManager           jobApplicationManager;
 
 
   public JobApplicationController(JobSeekerProfileManager jobSeekerProfileManager,
@@ -27,8 +27,8 @@ public class JobApplicationController
 
     this.jobApplicationManager = new JobApplicationManager(jobSeekerProfileManager,
                                                            jobApplicationSystem);
-    this.jobApplicationResultViewGenerator = new JobApplicationResultViewGenerator();
-    this.jobApplicationInfoGenerator = new JobApplicationInfoGenerator(jobSearchService,resumeManager);
+    this.jobApplicationResultViewFactory = new JobApplicationResultViewFactory();
+    this.jobApplicationInfoGenerator = new JobApplicationInfoGenerator(jobSearchService, resumeManager);
   }
 
 
@@ -37,7 +37,8 @@ public class JobApplicationController
   {
     JobApplicationInfo jobApplicationInfo = jobApplicationInfoGenerator.processJobApplicationRequest(request);
     JobApplicationResultStatus resultStatus = jobApplicationManager.processJobApplication(jobApplicationInfo);
-    JobApplicationResultView jobApplicationResultView = jobApplicationResultViewGenerator.generateJobApplicationResultView(jobApplicationInfo,resultStatus);
+    JobApplicationResultView jobApplicationResultView = jobApplicationResultViewFactory.render(jobApplicationInfo,
+                                                                                              resultStatus);
     response.setJobApplicationResultView(jobApplicationResultView);
     return response;
   }

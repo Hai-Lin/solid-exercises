@@ -91,5 +91,4 @@ public class JobApplicationManager
     handleApplicationResult(applicationResult);
   }
 
-
 }

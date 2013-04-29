@@ -8,11 +8,11 @@ import java.util.HashMap;
 import com.theladders.solid.srp.applicationInfo.JobApplicationInfo;
 import com.theladders.solid.srp.JobApplicationResultStatus;
 
-public class JobApplicationResultViewGenerator
+public class JobApplicationResultViewFactory
 {
 
-  public JobApplicationResultView generateJobApplicationResultView(JobApplicationInfo jobApplicationInfo,
-                                                                   JobApplicationResultStatus jobApplicationResultStatus)
+  public JobApplicationResultView render(JobApplicationInfo jobApplicationInfo,
+                                         JobApplicationResultStatus jobApplicationResultStatus)
   {
     Map<String, Object> model = new HashMap<>();
     List<String> errList = new ArrayList<>();
