@@ -38,7 +38,7 @@ public class JobApplicationController
   {
     JobApplicationInfo jobApplicationInfo = jobApplicationInfoGenerator.processJobApplicationRequest(request);
     Result result = jobApplicationManager.processJobApplication(jobApplicationInfo);
-    result.render(response,jobApplicationResultViewFactory);
+    result.render(response, jobApplicationResultViewFactory);
     return response;
   }
 

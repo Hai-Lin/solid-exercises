@@ -1,6 +1,6 @@
 package com.theladders.solid.srp.resume;
 
-import com.theladders.solid.srp.jobseeker.JobSeekerId;
+import com.theladders.solid.srp.jobseeker.JobSeeker;
 
 public class ResumeManager
 {
@@ -15,20 +15,20 @@ public class ResumeManager
   }
 
 
-  public void saveResume(JobSeekerId jobSeekerId,
+  public void saveResume(JobSeeker jobSeeker,
                            Resume resume)
   {
-    resumeRepository.saveResume(jobSeekerId,resume);
+    resumeRepository.saveResume(jobSeeker.getId(),resume);
   }
 
-  public void saveAsActive(JobSeekerId jobSeekerId,
+  public void saveAsActive(JobSeeker jobSeeker,
                            Resume resume)
   {
-    activeResumeRepository.makeActive(jobSeekerId, resume);
+    activeResumeRepository.makeActive(jobSeeker.getId(), resume);
   }
 
-  public Resume getActiveResume(JobSeekerId jobSeekerId)
+  public Resume getActiveResume(JobSeeker jobSeeker)
   {
-    return activeResumeRepository.activeResumeFor(jobSeekerId);
+    return activeResumeRepository.activeResumeFor(jobSeeker.getId());
   }
 }

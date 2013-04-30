@@ -7,9 +7,7 @@ import com.theladders.solid.srp.job.application.ApplicationFailureException;
 import com.theladders.solid.srp.job.application.JobApplicationSystem;
 import com.theladders.solid.srp.job.application.UnprocessedApplication;
 import com.theladders.solid.srp.jobseeker.JobSeeker;
-import com.theladders.solid.srp.jobseeker.JobSeekerProfile;
 import com.theladders.solid.srp.jobseeker.JobSeekerProfileManager;
-import com.theladders.solid.srp.jobseeker.ProfileStatus;
 import com.theladders.solid.srp.result.FailedApplicationResult;
 import com.theladders.solid.srp.result.InvalidJob;
 import com.theladders.solid.srp.result.InvalidResume;
@@ -17,6 +15,7 @@ import com.theladders.solid.srp.result.Result;
 import com.theladders.solid.srp.result.SuccessButProfileIncomplete;
 import com.theladders.solid.srp.result.SuccessfulApplicationResult;
 import com.theladders.solid.srp.resume.Resume;
+import com.theladders.solid.srp.job.application.JobApplicationResult;
 
 
 public class JobApplicationManager
@@ -34,31 +33,15 @@ public class JobApplicationManager
   }
 
 
-  private boolean isResumeCompleteByPremiumUser(JobSeeker jobSeeker)
-  {
-    JobSeekerProfile profile = jobSeekerProfileManager.getJobSeekerProfile(jobSeeker);
-
-
-    return !jobSeeker.isPremium() && (profile.getStatus().equals(ProfileStatus.INCOMPLETE) ||
-                                      profile.getStatus().equals(ProfileStatus.NO_PROFILE) ||
-                                      profile.getStatus().equals(ProfileStatus.REMOVED));
-  }
-
-
   public Result processJobApplication(JobApplicationInfo jobApplicationInfo)
-
   {
     Job job = jobApplicationInfo.getJob();
     JobSeeker jobSeeker = jobApplicationInfo.getJobSeeker();
     Resume resume = jobApplicationInfo.getResume();
-
-
     if (resume == null)
     {
       return new InvalidResume(jobApplicationInfo);
-
     }
-
     if (job == null)
     {
       return new InvalidJob(jobApplicationInfo);
@@ -71,7 +54,7 @@ public class JobApplicationManager
     {
       return new FailedApplicationResult(jobApplicationInfo);
     }
-    if (isResumeCompleteByPremiumUser(jobSeeker))
+    if (jobSeekerProfileManager.isResumeIncomplete(jobSeeker))
     {
       return new SuccessButProfileIncomplete(jobApplicationInfo);
     }
@@ -79,7 +62,7 @@ public class JobApplicationManager
   }
 
 
-  private void handleApplicationResult(com.theladders.solid.srp.job.application.JobApplicationResult result)
+  private void handleApplicationResult(JobApplicationResult result)
   {
     if (result.failure())
     {
@@ -93,9 +76,8 @@ public class JobApplicationManager
                      Resume resume)
   {
     UnprocessedApplication application = new UnprocessedApplication(jobSeeker, job, resume);
-    com.theladders.solid.srp.job.application.JobApplicationResult applicationResult = jobApplicationSystem.apply(
+    JobApplicationResult applicationResult = jobApplicationSystem.apply(
             application);
     handleApplicationResult(applicationResult);
   }
-
 }

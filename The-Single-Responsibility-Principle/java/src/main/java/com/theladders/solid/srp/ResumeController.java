@@ -40,9 +40,8 @@ public class ResumeController
     }
     else
     {
-      resume = resumeManager.getActiveResume(jobSeeker.getId());
+      resume = resumeManager.getActiveResume(jobSeeker);
     }
-
     return resume;
   }
 
@@ -51,10 +50,10 @@ public class ResumeController
                             ResumeInfo resumeInfo)
   {
     Resume resume = new Resume(resumeInfo);
-    resumeManager.saveResume(jobSeeker.getId(), resume);
+    resumeManager.saveResume(jobSeeker, resume);
     if (resumeInfo.isMakedActive())
     {
-      resumeManager.saveAsActive(jobSeeker.getId(), resume);
+      resumeManager.saveAsActive(jobSeeker, resume);
     }
     return resume;
   }
