@@ -25,7 +25,7 @@ public class JobApplicationInfoGenerator
   }
 
 
-  public JobApplicationInfo processJobApplicationRequest(HttpRequest request)
+  public JobApplicationInfo preprocessRequest(HttpRequest request)
   {
     String jobIdString = request.getParameter("jobId");
     JobSeeker jobSeeker = request.getSession().getJobSeeker();
