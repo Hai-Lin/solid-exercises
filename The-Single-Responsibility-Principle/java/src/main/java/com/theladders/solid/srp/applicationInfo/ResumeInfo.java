@@ -34,7 +34,7 @@ public class ResumeInfo
   }
 
 
-  public boolean isMakedActive()
+  public boolean isMakeActive()
   {
     return this.isMakdeActive;
   }
