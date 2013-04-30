@@ -51,7 +51,7 @@ public class ResumeController
   {
     Resume resume = new Resume(resumeInfo);
     resumeManager.saveResume(jobSeeker, resume);
-    if (resumeInfo.isMakedActive())
+    if (resumeInfo.isMakeActive())
     {
       resumeManager.saveAsActive(jobSeeker, resume);
     }
