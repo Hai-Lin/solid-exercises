@@ -4,6 +4,7 @@ package com.theladders.solid.srp.result;
 import com.theladders.solid.srp.applicationInfo.JobApplicationInfo;
 import com.theladders.solid.srp.http.HttpResponse;
 import com.theladders.solid.srp.view.JobApplicationResultViewFactory;
+import com.theladders.solid.srp.view.Renderer;
 
 public class InvalidResume   implements Result
 {
@@ -20,7 +21,7 @@ public class InvalidResume   implements Result
 
 
   @Override public void render(HttpResponse response,
-                               JobApplicationResultViewFactory render)
+                               Renderer render)
   {
     render.renderInvalidResumeView(response);
   }
