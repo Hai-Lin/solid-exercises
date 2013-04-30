@@ -32,15 +32,12 @@ public class JobApplicationController
     this.jobApplicationInfoGenerator = new JobApplicationInfoGenerator(jobSearchService, resumeManager);
   }
 
-
   public HttpResponse handle(HttpRequest request,
                              HttpResponse response)
   {
-    JobApplicationInfo jobApplicationInfo = jobApplicationInfoGenerator.processJobApplicationRequest(request);
+    JobApplicationInfo jobApplicationInfo = jobApplicationInfoGenerator.preprocessRequest(request);
     Result result = jobApplicationManager.processJobApplication(jobApplicationInfo);
     result.render(response, jobApplicationResultViewFactory);
     return response;
   }
-
-
 }
