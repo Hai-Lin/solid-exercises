@@ -1,6 +1,5 @@
 package com.theladders.solid.srp;
 
-
 import com.theladders.solid.srp.applicationInfo.JobApplicationInfo;
 import com.theladders.solid.srp.job.Job;
 import com.theladders.solid.srp.job.application.ApplicationFailureException;

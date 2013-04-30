@@ -50,6 +50,7 @@ public class SubscriberArticleManagerImpl implements SubscriberArticleManager
     return dbSuggestions;
   }
 
+
   public int addSuggestedArticle(SuggestedArticle suggestedArticle)
   {
     Integer STATUS_UNREAD = 1;
