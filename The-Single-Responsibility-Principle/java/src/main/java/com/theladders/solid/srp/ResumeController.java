@@ -1,7 +1,7 @@
 package com.theladders.solid.srp;
 
 
-import com.theladders.solid.srp.applicationInfo.ResumeInfo;
+import com.theladders.solid.srp.resume.ResumeInfo;
 import com.theladders.solid.srp.jobseeker.JobSeeker;
 import com.theladders.solid.srp.resume.Resume;
 import com.theladders.solid.srp.resume.ResumeManager;

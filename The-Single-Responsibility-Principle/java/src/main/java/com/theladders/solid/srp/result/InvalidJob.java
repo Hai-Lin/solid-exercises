@@ -1,19 +1,17 @@
 package com.theladders.solid.srp.result;
 
 
-import com.theladders.solid.srp.applicationInfo.JobApplicationInfo;
 import com.theladders.solid.srp.http.HttpResponse;
-import com.theladders.solid.srp.view.JobApplicationResultViewFactory;
 import com.theladders.solid.srp.view.Renderer;
 
 public class InvalidJob  implements Result
 {
 
-  private final JobApplicationInfo jobApplicationInfo;
+  private final String jobIdString;
 
-  public InvalidJob(JobApplicationInfo jobApplicationInfo)
+  public InvalidJob(String jobIdString)
   {
-    this.jobApplicationInfo = jobApplicationInfo;
+    this.jobIdString = jobIdString;
   }
 
   @Override public boolean failure()
@@ -25,7 +23,6 @@ public class InvalidJob  implements Result
   @Override public void render(HttpResponse response, Renderer render)
   {
 
-    String jobId = jobApplicationInfo.getJobId();
-    render.renderInvalidJobView(response, jobId);
+    render.renderInvalidJobView(response, jobIdString);
   }
 }

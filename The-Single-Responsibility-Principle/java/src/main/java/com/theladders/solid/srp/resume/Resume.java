@@ -1,7 +1,5 @@
 package com.theladders.solid.srp.resume;
 
-import com.theladders.solid.srp.applicationInfo.ResumeInfo;
-
 public class Resume
 {
   private final String resumeName;
